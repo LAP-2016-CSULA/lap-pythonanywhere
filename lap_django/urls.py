@@ -7,6 +7,7 @@ from django.conf.urls import patterns, url
 from app.forms import BootstrapAuthenticationForm
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import views
 from app.views import *
 admin.autodiscover()
 
@@ -54,13 +55,13 @@ router.register(r'species', SpeciesViewSet)
 # router.register(r'userinfo', userinfo)
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'app.views.home', name='home'),
-    url(r'^contact$', 'app.views.contact', name='contact'),
-    url(r'^about', 'app.views.about', name='about'),
+    url(r'^contact$', contact, name='contact'),
+    url(r'^about', about, name='about'),
     url(r'^login/$',
-        'django.contrib.auth.views.login',
+        views.login,
         {
             'template_name': 'app/login.html',
             'authentication_form': BootstrapAuthenticationForm,
@@ -72,7 +73,7 @@ urlpatterns = patterns('',
         },
         name='login'),
     url(r'^logout$',
-        'django.contrib.auth.views.logout',
+        views.logout,
         {
             'next_page': '/',
         },
@@ -88,6 +89,6 @@ urlpatterns = patterns('',
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^', include(router.urls)),
     url(r'userinfo', userinfo, name='userinfo'),
-)
+]
 
 
