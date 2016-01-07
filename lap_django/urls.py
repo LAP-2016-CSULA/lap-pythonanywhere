@@ -13,7 +13,6 @@ admin.autodiscover()
 from rest_framework import permissions, routers, serializers, viewsets
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
-
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
 # from django.contrib import admin
@@ -52,6 +51,7 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'species', SpeciesViewSet)
+# router.register(r'userinfo', userinfo)
 
 
 urlpatterns = patterns('',
@@ -87,6 +87,7 @@ urlpatterns = patterns('',
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^', include(router.urls)),
+    url(r'userinfo', userinfo, name='userinfo'),
 )
 
 
