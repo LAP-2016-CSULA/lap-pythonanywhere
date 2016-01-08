@@ -5,15 +5,16 @@ Definition of views.
 from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
+from django.contrib.auth.models import User, Group
 from datetime import datetime
 from .models import Species
-from .serializers import SpeciesSerializer
+from .serializers import SpeciesSerializer, UserSerializer, GroupSerializer
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
 # need this for getting userinfo
 from oauth2_provider.oauth2_backends import get_oauthlib_core
+from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
 def home(request):
     """Renders the home page."""
@@ -75,5 +76,21 @@ def userinfo(request):
     valid, r = oauthlib_core.verify_request(request, scopes=[])
     if valid:
         # return whether the user is a superuser
-        return Response({'is_admin' : str(r.user.is_superuser)})
+        #return Response({'is_admin' : str(r.user.is_superuser)})
+        serializer = UserSeriaalizer(r.user)
+        return Response(serializer.data)
     return Response({})
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    required_scopes = ['groups']
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+

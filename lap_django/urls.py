@@ -6,7 +6,6 @@ from datetime import datetime
 from django.conf.urls import patterns, url
 from app.forms import BootstrapAuthenticationForm
 from django.contrib import admin
-from django.contrib.auth.models import User, Group
 from django.contrib.auth import views
 from app.views import *
 admin.autodiscover()
@@ -18,33 +17,6 @@ from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasS
 from django.conf.urls import include
 # from django.contrib import admin
 # admin.autodiscover()
-
-# django-oauth-toolkkit tutorial
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['groups']
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-
-
-# Test model
-
 
 
 # Routers
