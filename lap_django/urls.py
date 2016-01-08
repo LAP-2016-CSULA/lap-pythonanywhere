@@ -11,7 +11,6 @@ from app.views import *
 admin.autodiscover()
 
 from rest_framework import permissions, routers, serializers, viewsets
-from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
@@ -61,6 +60,7 @@ urlpatterns = [
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^', include(router.urls)),
     url(r'userinfo', userinfo, name='userinfo'),
+    url(r'register', RegistrationView.as_view(), name='register'),
 ]
 
 

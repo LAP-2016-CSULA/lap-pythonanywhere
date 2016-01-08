@@ -8,8 +8,9 @@ from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
 from .models import Species
-from .serializers import SpeciesSerializer, UserSerializer, GroupSerializer
+from .serializers import SpeciesSerializer, UserSerializer, GroupSerializer, RegistrationSerializer
 from rest_framework import viewsets, permissions
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 # need this for getting userinfo
@@ -81,6 +82,31 @@ def userinfo(request):
         return Response(serializer.data)
     return Response({})
 
+#@api_view(['GET', 'POST'])
+#def register(request):
+#    """ Registration view. It takes a json and register that user. """
+#    permission_classes = []
+#    required_scopes = []
+#    serializer = RegistrationSerializer(data=request.data)
+#    if serializer.is_valid:
+#        return Response({'registration' : 'success'})
+#    return Response({'registration' : 'false'})
+
+
+class RegistrationView(APIView):
+    permission_classes = []
+    required_scopes = []
+
+    def post(self, request):
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.data
+            user = User.objects.create(username=data['username'], email=data['email'])
+            # Use set_password() to hash raw password
+            user.set_password(data['password'])
+            user.save()
+            return Response({'status' : 'success'})
+        return Response({'status' : 'false'})
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]

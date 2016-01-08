@@ -19,6 +19,7 @@ class SpeciesTypeSerializer(serializers.ModelSerializer):
 
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
+    """ Serializer of User. """
     class Meta:
         model = User
 
@@ -26,4 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
+
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    """ Serializer of Registering User. It should only contains some information. """
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'email')
 
