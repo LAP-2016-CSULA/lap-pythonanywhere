@@ -77,7 +77,7 @@ def userinfo(request):
     if valid:
         # return whether the user is a superuser
         #return Response({'is_admin' : str(r.user.is_superuser)})
-        serializer = UserSeriaalizer(r.user)
+        serializer = UserSerializer(r.user)
         return Response(serializer.data)
     return Response({})
 
