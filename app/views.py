@@ -83,13 +83,13 @@ def userinfo(request):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     required_scopes = ['groups']
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
