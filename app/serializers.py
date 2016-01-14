@@ -38,3 +38,20 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'password', 'email')
 
+
+class DailyUpdateSerializer(serializers.ModelSerializer):
+    """ Serializer of Daily Update. """
+    class Meta:
+        model = models.DailyUpdate
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    """ Serializer of Question. """
+    class Meta:
+        model = models.Question
+
+
+class TreeSerializer(serializers.ModelSerializer):
+    """ Serializer of Tree. """
+    class Meta:
+        model = models.Tree

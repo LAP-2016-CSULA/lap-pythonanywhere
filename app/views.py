@@ -7,8 +7,9 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
-from .models import Species
-from .serializers import SpeciesSerializer, UserSerializer, GroupSerializer, RegistrationSerializer
+from .models import Species, Question, DailyUpdate, Tree
+from .serializers import *
+
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -69,28 +70,14 @@ class SpeciesViewSet(viewsets.ModelViewSet):
 @api_view(['GET', 'POST'])
 def userinfo(request):
     """ Check whether the user is an admin or not. """
-    # permission_classes = [permissions.IsAuthenticated]
-    # required_scopes = []
     # from django-oauth-toolkit source code
     oauthlib_core = get_oauthlib_core()
     # oauthli_core.verify_request return valid/not valid and the processed request
     valid, r = oauthlib_core.verify_request(request, scopes=[])
     if valid:
-        # return whether the user is a superuser
-        #return Response({'is_admin' : str(r.user.is_superuser)})
         serializer = UserSerializer(r.user)
         return Response(serializer.data)
     return Response({})
-
-#@api_view(['GET', 'POST'])
-#def register(request):
-#    """ Registration view. It takes a json and register that user. """
-#    permission_classes = []
-#    required_scopes = []
-#    serializer = RegistrationSerializer(data=request.data)
-#    if serializer.is_valid:
-#        return Response({'registration' : 'success'})
-#    return Response({'registration' : 'false'})
 
 
 class RegistrationView(APIView):
@@ -108,6 +95,7 @@ class RegistrationView(APIView):
             return Response({'status' : 'success'})
         return Response({'status' : 'false'})
 
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     queryset = User.objects.all()
@@ -120,3 +108,20 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+
+class QuestionViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+
+class DailyUpdateViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    queryset = DailyUpdate.objects.all()
+    serializer_class = DailyUpdateSerializer
+
+
+class TreeViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    queryset = Tree.objects.all()
+    serializer_class = TreeSerializer

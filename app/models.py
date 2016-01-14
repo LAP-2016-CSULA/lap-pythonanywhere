@@ -31,25 +31,13 @@ class Species(models.Model):
         return self.name
 
 
-class Category(models.Model):
+class Question(models.Model):
     """ species' category. """
-    species = models.ForeignKey(Species)
-    name = models.CharField(max_length=50)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        """ display name. """
-        return self.name
-
-
-class CategoryChoice(models.Model):
-    """ choices. """
-    category = models.ForeignKey(Category)
     text = models.CharField(max_length=50)
     history = HistoricalRecords()
 
     def __str__(self):
-        """ display choice text. """
+        """ display name. """
         return self.text
 
 
@@ -92,3 +80,16 @@ class DailyUpdate(models.Model):
     @_history_user.setter
     def _history_user(self,value):
         self.changed_by = value
+
+
+class Choice(models.Model):
+    """ choices. """
+    question = models.ForeignKey(Question)
+    value = models.BooleanField(default=False)
+    daily_update = models.ManyToManyField(DailyUpdate)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """ display choice text. """
+        return self.text
+

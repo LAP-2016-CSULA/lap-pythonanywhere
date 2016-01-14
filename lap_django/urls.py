@@ -23,12 +23,15 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'species', SpeciesViewSet)
+router.register(r'questions', QuestionViewSet)
+router.register(r'dailyupdates', DailyUpdateViewSet)
+router.register(r'trees', TreeViewSet)
 # router.register(r'userinfo', userinfo)
 
 
 urlpatterns = [
     # Examples:
-    # url(r'^$', 'app.views.home', name='home'),
+    url(r'^$', home, name='home'),
     url(r'^contact$', contact, name='contact'),
     url(r'^about', about, name='about'),
     url(r'^login/$',
