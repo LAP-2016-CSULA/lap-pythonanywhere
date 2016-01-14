@@ -63,8 +63,9 @@ urlpatterns = [
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^', include(router.urls)),
     # custom API
-    url(r'userinfo', userinfo, name='userinfo'),
-    url(r'register', RegistrationView.as_view(), name='register'),
+    url(r'^userinfo', userinfo, name='userinfo'),
+    url(r'^register', RegistrationView.as_view(), name='register'),
+    url(r'^imageupload', FileUploadView.as_view(), name='imageupload'),
 ]
 
 
