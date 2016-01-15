@@ -14,7 +14,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser, FormParser
 # need this for getting userinfo
 from oauth2_provider.oauth2_backends import get_oauthlib_core
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
@@ -131,15 +131,15 @@ class TreeViewSet(viewsets.ModelViewSet):
 # http://stackoverflow.com/questions/20473572/django-rest-framework-file-upload
 class FileUploadView(APIView):
     """ Uploading picture/file. """
-    parser_classes = (FileUploadParser,)
+    parser_classes = (MultiPartParser, FormParser,)
     # TESTING: do not require authorization. will apply it later
     permission_classes = []
     required_scopes = []
 
     def post(self, request, format='jpg'):
         """ Get file from POST request. """
-        up_file = request.data['file']
-        with open(up_file.name, 'wb+') as destination:
+        up_file = request.FILES['file']
+        with open('images/' + up_file.name, 'wb+') as destination:
             for chunk in up_file.chunks():
                 destination.write(chunk)
                 # destination.close()
