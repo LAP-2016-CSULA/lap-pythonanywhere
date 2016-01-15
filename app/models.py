@@ -51,7 +51,7 @@ class Tree(models.Model):
 
     def __str__(self):
         """ display species name and tree id. """
-        return self.species.name + ' [' + self.id + ']'
+        return self.species.name + ' [' + str(self.id) + ']'
 
     @property
     def _history_user(self):
@@ -71,7 +71,7 @@ class DailyUpdate(models.Model):
 
     def __str__(self):
         """ display string. """
-        return 'dailyupdate [' + self.id + '] of ' + self.tree
+        return 'dailyupdate [' + str(self.id) + '] of ' + self.tree
 
     @property
     def _history_user(self):
