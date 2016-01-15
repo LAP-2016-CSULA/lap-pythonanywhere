@@ -4,6 +4,8 @@ Definition of urls for lap_django.
 
 from datetime import datetime
 from django.conf.urls import patterns, url
+from django.conf.urls.static import static
+from django.conf import settings
 from app.forms import BootstrapAuthenticationForm
 from django.contrib import admin
 from django.contrib.auth import views
@@ -16,7 +18,6 @@ from rest_framework import permissions, routers, serializers, viewsets
 from django.conf.urls import include
 # from django.contrib import admin
 # admin.autodiscover()
-
 
 # Routers
 router = routers.DefaultRouter()
@@ -66,6 +67,6 @@ urlpatterns = [
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
     url(r'^imageupload', FileUploadView.as_view(), name='imageupload'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
