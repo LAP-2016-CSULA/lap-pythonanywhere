@@ -145,3 +145,27 @@ class FileUploadView(APIView):
                 # destination.close()
 
         return Response(status=201)
+
+
+class DailyImageUploadView(APIView):
+    """ Image upload for daily update v2. This require daily update id. """
+    parser_classes = (MultiPartParser, FormParser,)
+    # permisstion_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
+    def post(self, request, format='jpg'):
+        """ Get image form POST request. """
+        # Check if there is a daily update info
+        try:
+            id = request.data['dailyupdate_id']
+            du = DailyUpdate.objects.get(pk=int(request.POST['dailyupdate_id']))
+        except Exception as err:
+            return Response({'detail': 'bad dailyupdate_id; error type: ' + str(type(err))}, status=404)
+        image = request.data['file']
+        # Assume all image will be in jpg format
+        filename = 'images/' + str(du.tree) + '/' + str(du.id) + 'jpg'
+        with open(filename, 'wb+') as destination:
+            for chunk in image.chunks():
+                destination.write(chunk)
+                # destination.close()
+
+        return Response({'detail' : 'image uploaded successfully'}, status=201)

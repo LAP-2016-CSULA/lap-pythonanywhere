@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
     url(r'^imageupload', FileUploadView.as_view(), name='imageupload'),
+    url(r'^imageup', DailyImageUploadView.as_view(), name='imageup'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -71,7 +71,7 @@ class DailyUpdate(models.Model):
 
     def __str__(self):
         """ display string. """
-        return 'dailyupdate [' + str(self.id) + '] of ' + self.tree
+        return 'dailyupdate [' + str(self.id) + '] of ' + str(self.tree)
 
     @property
     def _history_user(self):
