@@ -55,8 +55,9 @@
     <Folder Include="lap_django\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="requirements.txt" />
+    <Content Include=".gitignore" />
     <Content Include="db.sqlite3" />
+    <Content Include="requirements.txt" />
     <Content Include="app\static\app\content\bootstrap.css" />
     <Content Include="app\static\app\content\bootstrap.min.css" />
     <Content Include="app\static\app\content\site.css" />
