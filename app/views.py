@@ -18,6 +18,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 # need this for getting userinfo
 from oauth2_provider.oauth2_backends import get_oauthlib_core
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+import os
 
 def home(request):
     """Renders the home page."""
@@ -158,14 +160,35 @@ class DailyImageUploadView(APIView):
         try:
             id = request.data['dailyupdate_id']
             du = DailyUpdate.objects.get(pk=int(request.POST['dailyupdate_id']))
+        except ObjectDoesNotExist:
+            return Response({'detail' : 'provided dailyupdate_id does not exist'}, status=400)
+        except MultipleObjectsReturned:
+            return ResourceWarning({'detail': 'provided dailyupdate_id results in multiple objects'}, status=400)
         except Exception as err:
             return Response({'detail': 'bad dailyupdate_id; error type: ' + str(type(err))}, status=404)
-        image = request.data['file']
+        image = request.FILES['file']
         # Assume all image will be in jpg format
-        filename = 'images/' + str(du.tree) + '/' + str(du.id) + 'jpg'
-        with open(filename, 'wb+') as destination:
-            for chunk in image.chunks():
-                destination.write(chunk)
-                # destination.close()
+        check_or_create_folder('images')
+        path = 'images/daily'
+        if check_or_create_folder(path):
+            filename = path + '/' + str(du.id) + '.jpg'
+            if os.path.exists(filename):
+                return Response({'detail': 'file already exists for the provided dailyupdate_id'}, status=404)
+            else:
+                with open(filename, 'wb+') as destination:
+                    for chunk in image.chunks():
+                        destination.write(chunk)
+                        # destination.close()
 
         return Response({'detail' : 'image uploaded successfully'}, status=201)
+
+def check_or_create_folder(path):
+    """ Check if folder exists or not. Create new folder if it does not. 
+        Arg:
+        path (str) -- filepath to check on. """
+    if not os.path.exists(path):
+        os.makedirs(path)
+        return True
+    if not os.path.isdir(path):
+        return True
+    return False
