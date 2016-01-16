@@ -14,7 +14,7 @@ class SpeciesType(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        """ display name. """
+        """ display the category name of the species e.g. bird. """
         return self.name
 
 
