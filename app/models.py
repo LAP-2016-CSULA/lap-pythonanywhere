@@ -31,6 +31,14 @@ class Species(models.Model):
         """ display name. """
         return self.name
 
+def create_choices_on_question_creation(instance, created, raw, **kwargs):
+    """ Create 2 choices for each question. """
+    if created:
+        c1 = Choice(question=instance, value=True)
+        c2 = Choice(question=instance, value=False)
+        c1.save()
+        c2.save()
+
 
 class Question(models.Model):
     """ species' category. """
@@ -41,6 +49,7 @@ class Question(models.Model):
         """ display name. """
         return self.text
 
+models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')
 
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
@@ -63,11 +72,23 @@ class Tree(models.Model):
         self.changed_by = value
 
 
+class Choice(models.Model):
+    """ choices. """
+    question = models.ForeignKey(Question)
+    value = models.BooleanField(default=False)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """ display choice text. """
+        return str(self.question) + '|' + str(self.value)
+
+
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
     tree = models.ForeignKey(Tree)
     # added_by = models.ForeignKey('auth.User', related_name='creator')
     changed_by = models.ForeignKey('auth.User', related_name='modifier')
+    choices = models.ManyToManyField(Choice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
@@ -82,16 +103,4 @@ class DailyUpdate(models.Model):
     @_history_user.setter
     def _history_user(self,value):
         self.changed_by = value
-
-
-class Choice(models.Model):
-    """ choices. """
-    question = models.ForeignKey(Question)
-    value = models.BooleanField(default=False)
-    daily_update = models.ManyToManyField(DailyUpdate)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        """ display choice text. """
-        return self.text
 

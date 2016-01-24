@@ -43,8 +43,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('username', 'password', 'email')
 
 
+class ChoiceSerializer(serializers.ModelSerializer):
+    """ Serializer of choice. """
+    class Meta:
+        model = models.Choice
+
+
+# http://stackoverflow.com/questions/14978464/django-rest-nested-object-add-on-create-post-not-just-update-put
 class DailyUpdateSerializer(serializers.ModelSerializer):
     """ Serializer of Daily Update. """
+    # choice_objs = ChoiceSerializer(source='choices', many=True, required=False)
     class Meta:
         model = models.DailyUpdate
 
