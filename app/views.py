@@ -124,12 +124,12 @@ class DailyUpdateViewSet(viewsets.ModelViewSet):
     queryset = DailyUpdate.objects.all()
     serializer_class = DailyUpdateSerializer
 
-    # http://stackoverflow.com/questions/14978464/django-rest-nested-object-add-on-create-post-not-just-update-put
-    #def create(self, request):
-    #    """ Create new entry of daily update. """
-    #    data = request.DATA
-
-    #    du = Dail
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return DailyUpdateSetterSerializer
+        else:
+            return DailyUpdateSerializer
 
 
 

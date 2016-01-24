@@ -49,6 +49,7 @@ class Question(models.Model):
         """ display name. """
         return self.text
 
+# Auto create 2 choices in the db coresponse to each question on its creation
 models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')
 
 class Tree(models.Model):

@@ -52,7 +52,13 @@ class ChoiceSerializer(serializers.ModelSerializer):
 # http://stackoverflow.com/questions/14978464/django-rest-nested-object-add-on-create-post-not-just-update-put
 class DailyUpdateSerializer(serializers.ModelSerializer):
     """ Serializer of Daily Update. """
-    # choice_objs = ChoiceSerializer(source='choices', many=True, required=False)
+    choices = ChoiceSerializer(many=True)
+    class Meta:
+        model = models.DailyUpdate
+
+
+class DailyUpdateSetterSerializer(serializers.ModelSerializer):
+    """ Serializer of daily update. This one is used in post. """
     class Meta:
         model = models.DailyUpdate
 
