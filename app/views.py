@@ -18,6 +18,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 # need this for getting userinfo
 from oauth2_provider.oauth2_backends import get_oauthlib_core
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+import os
 
 def home(request):
     """Renders the home page."""
@@ -66,6 +68,13 @@ class SpeciesViewSet(viewsets.ModelViewSet):
     required_scopes = []
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
+
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return SpeciesSetterSerializer
+        else:
+            return SpeciesSerializer
 
 # function based view
 @api_view(['GET', 'POST'])
@@ -117,31 +126,31 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 
 class DailyUpdateViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     queryset = DailyUpdate.objects.all()
     serializer_class = DailyUpdateSerializer
 
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return DailyUpdateSetterSerializer
+        else:
+            return DailyUpdateSerializer
+
+
 
 class TreeViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     queryset = Tree.objects.all()
     serializer_class = TreeSerializer
 
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return TreeSetterSerializer
+        else:
+            return TreeSerializer
 
-# http://stackoverflow.com/questions/20473572/django-rest-framework-file-upload
-class FileUploadView(APIView):
-    """ Uploading picture/file. """
-    parser_classes = (MultiPartParser, FormParser,)
-    # TESTING: do not require authorization. will apply it later
-    permission_classes = []
-    required_scopes = []
 
-    def post(self, request, format='jpg'):
-        """ Get file from POST request. """
-        up_file = request.FILES['file']
-        with open('images/' + up_file.name, 'wb+') as destination:
-            for chunk in up_file.chunks():
-                destination.write(chunk)
-                # destination.close()
-
-        return Response(status=201)

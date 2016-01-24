@@ -24,11 +24,20 @@ class Species(models.Model):
     scientific_name = models.CharField(max_length=100)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=2048)
+    image = models.ImageField(max_length=None, null=True, blank=True, upload_to='species')
     history = HistoricalRecords()
 
     def __str__(self):
         """ display name. """
         return self.name
+
+def create_choices_on_question_creation(instance, created, raw, **kwargs):
+    """ Create 2 choices for each question. """
+    if created:
+        c1 = Choice(question=instance, value=True)
+        c2 = Choice(question=instance, value=False)
+        c1.save()
+        c2.save()
 
 
 class Question(models.Model):
@@ -40,6 +49,8 @@ class Question(models.Model):
         """ display name. """
         return self.text
 
+# Auto create 2 choices in the db coresponse to each question on its creation
+models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')
 
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
@@ -63,11 +74,24 @@ class Tree(models.Model):
         self.changed_by = value
 
 
+class Choice(models.Model):
+    """ choices. """
+    question = models.ForeignKey(Question)
+    value = models.BooleanField(default=False)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """ display choice text. """
+        return str(self.question) + '|' + str(self.value)
+
+
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
     tree = models.ForeignKey(Tree)
-    added_by = models.ForeignKey('auth.User', related_name='creator')
+    # added_by = models.ForeignKey('auth.User', related_name='creator')
     changed_by = models.ForeignKey('auth.User', related_name='modifier')
+    choices = models.ManyToManyField(Choice)
+    image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -82,15 +106,12 @@ class DailyUpdate(models.Model):
     def _history_user(self,value):
         self.changed_by = value
 
-
 class Choice(models.Model):
     """ choices. """
     question = models.ForeignKey(Question)
-    value = models.BooleanField(default=False, help_text="Click for yes, leave blank for no.")
-    daily_update = models.ManyToManyField(DailyUpdate)
+    value = models.BooleanField(default=False)
     history = HistoricalRecords()
 
     def __str__(self):
         """ display choice text. """
-        return str(self.question) + ' -> ' + str(self.value)
-
+        return str(self.question) + '|' + str(self.value)

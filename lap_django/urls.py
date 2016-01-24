@@ -66,7 +66,6 @@ urlpatterns = [
     # custom API
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
-    url(r'^imageupload', FileUploadView.as_view(), name='imageupload'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
