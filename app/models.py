@@ -14,7 +14,7 @@ class SpeciesType(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        """ display name. """
+        """ display the category name of the species e.g. bird. """
         return self.name
 
 
@@ -42,7 +42,7 @@ def create_choices_on_question_creation(instance, created, raw, **kwargs):
 
 class Question(models.Model):
     """ species' category. """
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=255)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -58,11 +58,12 @@ class Tree(models.Model):
     long = models.FloatField()
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
+    landmark = models.CharField(max_length=255, default="unknown")
     history = HistoricalRecords()
 
     def __str__(self):
         """ display species name and tree id. """
-        return self.species.name + ' [' + str(self.id) + ']'
+        return self.species.name + ' [' + str(self.id) + '] found at ' + str(self.landmark) + ' at ' + str(self.lat) + ' lat, ' + str(self.long) + ' long' 
 
     @property
     def _history_user(self):
@@ -95,7 +96,7 @@ class DailyUpdate(models.Model):
 
     def __str__(self):
         """ display string. """
-        return 'dailyupdate [' + str(self.id) + '] of ' + str(self.tree)
+        return 'Daily Update # ' + str(self.id) + ' of ' + str(self.tree)
 
     @property
     def _history_user(self):
@@ -105,3 +106,12 @@ class DailyUpdate(models.Model):
     def _history_user(self,value):
         self.changed_by = value
 
+class Choice(models.Model):
+    """ choices. """
+    question = models.ForeignKey(Question)
+    value = models.BooleanField(default=False)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """ display choice text. """
+        return str(self.question) + '|' + str(self.value)
