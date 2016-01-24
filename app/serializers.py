@@ -22,6 +22,10 @@ class SpeciesSerializer(serializers.ModelSerializer):
         model = models.Species
         # depth = 1
 
+class SpeciesSetterSerializer(serializers.ModelSerializer):
+    """ POST Serializer of Species. """
+    class Meta:
+        model = models.Species
 
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
@@ -45,6 +49,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 class ChoiceSerializer(serializers.ModelSerializer):
     """ Serializer of choice. """
+    question = serializers.StringRelatedField()
+    class Meta:
+        model = models.Choice
+
+
+class ChoiceSetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Choice
 
@@ -71,5 +81,10 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class TreeSerializer(serializers.ModelSerializer):
     """ Serializer of Tree. """
+    class Meta:
+        model = models.Tree
+
+class TreeSetterSerializer(serializers.ModelSerializer):
+    """ POST Serializer of Tree. """
     class Meta:
         model = models.Tree

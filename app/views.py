@@ -69,6 +69,13 @@ class SpeciesViewSet(viewsets.ModelViewSet):
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
 
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return SpeciesSetterSerializer
+        else:
+            return SpeciesSerializer
+
 # function based view
 @api_view(['GET', 'POST'])
 def userinfo(request):
@@ -139,66 +146,11 @@ class TreeViewSet(viewsets.ModelViewSet):
     queryset = Tree.objects.all()
     serializer_class = TreeSerializer
 
-
-# http://stackoverflow.com/questions/20473572/django-rest-framework-file-upload
-class FileUploadView(APIView):
-    """ Uploading picture/file. """
-    parser_classes = (MultiPartParser, FormParser,)
-    # TESTING: do not require authorization. will apply it later
-    permission_classes = []
-    required_scopes = []
-
-    def post(self, request, format='jpg'):
-        """ Get file from POST request. """
-        up_file = request.FILES['file']
-        with open('images/' + up_file.name, 'wb+') as destination:
-            for chunk in up_file.chunks():
-                destination.write(chunk)
-                # destination.close()
-
-        return Response(status=201)
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return TreeSetterSerializer
+        else:
+            return TreeSerializer
 
 
-class DailyImageUploadView(APIView):
-    """ Image upload for daily update v2. This require daily update id. """
-    parser_classes = (MultiPartParser, FormParser,)
-    # permisstion_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-    permission_classes = []
-    def post(self, request, format='jpg'):
-        """ Get image form POST request. """
-        # Check if there is a daily update info
-        try:
-            id = request.data['dailyupdate_id']
-            du = DailyUpdate.objects.get(pk=int(request.POST['dailyupdate_id']))
-        except ObjectDoesNotExist:
-            return Response({'detail' : 'provided dailyupdate_id does not exist'}, status=400)
-        except MultipleObjectsReturned:
-            return ResourceWarning({'detail': 'provided dailyupdate_id results in multiple objects'}, status=400)
-        except Exception as err:
-            return Response({'detail': 'bad dailyupdate_id; error type: ' + str(type(err))}, status=404)
-        image = request.FILES['file']
-        # Assume all image will be in jpg format
-        check_or_create_folder('images')
-        path = 'images/daily'
-        if check_or_create_folder(path):
-            filename = path + '/' + str(du.id) + '.jpg'
-            if os.path.exists(filename):
-                return Response({'detail': 'file already exists for the provided dailyupdate_id'}, status=404)
-            else:
-                with open(filename, 'wb+') as destination:
-                    for chunk in image.chunks():
-                        destination.write(chunk)
-                        # destination.close()
-
-        return Response({'detail' : 'image uploaded successfully'}, status=201)
-
-def check_or_create_folder(path):
-    """ Check if folder exists or not. Create new folder if it does not. 
-        Arg:
-        path (str) -- filepath to check on. """
-    if not os.path.exists(path):
-        os.makedirs(path)
-        return True
-    if not os.path.isdir(path):
-        return True
-    return False
