@@ -24,6 +24,7 @@ class Species(models.Model):
     scientific_name = models.CharField(max_length=100)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=2048)
+    image = models.ImageField(max_length=None, null=True, blank=True, upload_to='species')
     history = HistoricalRecords()
 
     def __str__(self):
