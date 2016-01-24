@@ -119,13 +119,15 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 
 class DailyUpdateViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     queryset = DailyUpdate.objects.all()
     serializer_class = DailyUpdateSerializer
 
 
 class TreeViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     queryset = Tree.objects.all()
     serializer_class = TreeSerializer
 

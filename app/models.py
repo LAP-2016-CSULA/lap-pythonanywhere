@@ -65,8 +65,9 @@ class Tree(models.Model):
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
     tree = models.ForeignKey(Tree)
-    added_by = models.ForeignKey('auth.User', related_name='creator')
+    # added_by = models.ForeignKey('auth.User', related_name='creator')
     changed_by = models.ForeignKey('auth.User', related_name='modifier')
+    image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
     def __str__(self):

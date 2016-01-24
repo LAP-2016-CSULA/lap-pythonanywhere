@@ -7,16 +7,20 @@ from rest_framework import permissions, routers, serializers, viewsets
 
 from django.contrib.auth.models import User, Group
 
-class SpeciesSerializer(serializers.ModelSerializer):
-    """ Serializer of Spcies. """
-    class Meta:
-        model = models.Species
-
 
 class SpeciesTypeSerializer(serializers.ModelSerializer):
     """ Serializer of Species Type. """
     class Meta:
         model = models.SpeciesType
+
+
+class SpeciesSerializer(serializers.ModelSerializer):
+    """ Serializer of Spcies. """
+    #type = serializers.SlugRelatedField(slug_field='name', queryset=models.SpeciesType.objects.all())
+    type = SpeciesTypeSerializer(read_only=True)
+    class Meta:
+        model = models.Species
+        # depth = 1
 
 
 # django-oauth-toolkkit tutorial
