@@ -120,7 +120,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
