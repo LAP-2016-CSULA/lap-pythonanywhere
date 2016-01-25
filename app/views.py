@@ -21,6 +21,10 @@ from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasS
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 import os
 
+#filter
+import django_filters
+
+
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
@@ -63,11 +67,21 @@ def about(request):
     )
 
 
+class SpeciesFilter(django_filters.FilterSet):
+    """ Special filter for species view. """
+    type_id = django_filters.NumberFilter(name='type__id')
+    type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
+
+    class Meta:
+        model = Species
+        
+
 class SpeciesViewSet(viewsets.ModelViewSet):
     permission_classes = []
     required_scopes = []
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
+    filter_class = SpeciesFilter
 
     def get_serializer_class(self):
         action_list = ['create', 'update']
