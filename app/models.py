@@ -58,12 +58,11 @@ class Tree(models.Model):
     long = models.FloatField()
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
-    landmark = models.CharField(max_length=255, default="unknown")
     history = HistoricalRecords()
 
     def __str__(self):
         """ display species name and tree id. """
-        return self.species.name + ' [' + str(self.id) + '] found at ' + str(self.landmark) + ' at ' + str(self.lat) + ' lat, ' + str(self.long) + ' long' 
+        return self.species.name + ' [' + str(self.id) + '] found at lat, ' + str(self.long) + ' long' 
 
     @property
     def _history_user(self):
