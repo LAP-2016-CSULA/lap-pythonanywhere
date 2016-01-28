@@ -50,7 +50,7 @@ class Question(models.Model):
         return self.text
 
 # Auto create 2 choices in the db coresponse to each question on its creation
-models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')
+models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')       
 
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
@@ -74,6 +74,27 @@ class Tree(models.Model):
         self.changed_by = value
 
 
+class Bird(models.Model):
+    """
+    A bird instance. It should contain the the tree instance it was interacting with.
+    """
+    species = models.ForeignKey(Species)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """
+        Shows bird information in a human-readable format
+        """
+        return self.species.name
+
+    @property
+    def _history_user(self):
+        return self.changed_by
+
+    @_history_user.setter
+    def _history_user(self,value):
+        self.changed_by = value
+
 class Choice(models.Model):
     """ choices. """
     question = models.ForeignKey(Question)
@@ -84,6 +105,28 @@ class Choice(models.Model):
         """ display choice text. """
         return str(self.question) + '|' + str(self.value)
 
+class BirdObservation(models.Model):
+    """
+
+    """
+    bird = models.ForeignKey(Bird)
+    tree_observed_on = models.ManyToManyField(Tree, blank=False)
+    choices = models.ManyToManyField(Choice)
+    image = models.ImageField(max_length=None, null=True, blank=True)
+
+    def __str__(self):
+        """
+
+        """
+        return "Observation of " + str(self.bird)
+
+    @property
+    def _history_user(self):
+        return self.changed_by
+
+    @_history_user.setter
+    def _history_user(self,value):
+        self.changed_by = value
 
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
