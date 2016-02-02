@@ -6,7 +6,9 @@ Each models should have a history field of type HistoricalRecords to store the h
 
 from django.db import models
 from simple_history.models import HistoricalRecords
-
+from PIL import Image, ImageFile
+import os
+from lap_django.settings import MEDIA_ROOT
 
 class SpeciesType(models.Model):
     """ species type. """
@@ -32,7 +34,9 @@ class Species(models.Model):
         return self.name
 
 def create_choices_on_question_creation(instance, created, raw, **kwargs):
-    """ Create 2 choices for each question. """
+    """ Create 2 choices for each question.
+    Check post_save in the django documentation for the parameter
+    """
     if created:
         c1 = Choice(question=instance, value=True)
         c2 = Choice(question=instance, value=False)
@@ -135,6 +139,18 @@ class DailyUpdate(models.Model):
     choices = models.ManyToManyField(Choice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
+
+    def save(self, *args, **kwargs):
+        """ Override save. Resize the image ratio """
+        super(DailyUpdate, self).save(*args, **kwargs)
+        #if self.image:
+        path = os.path.join(MEDIA_ROOT, self.image.path)
+        image = Image.open(path)
+        #image = Image.open(self.image.path)
+        h = image.height
+        w = int(h * 2 / 3)
+        image.resize((w, h))
+        image.save(path, 'JPEG')
 
     def __str__(self):
         """ display string. """
