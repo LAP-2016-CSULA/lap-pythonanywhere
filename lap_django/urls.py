@@ -26,7 +26,7 @@ router.register(r'groups', GroupViewSet)
 router.register(r'species', SpeciesViewSet)
 router.register(r'questions', QuestionViewSet)
 router.register(r'dailyupdates', DailyUpdateViewSet)
-router.register(r'trees', TreeViewSet)
+#router.register(r'trees', TreeViewSet)
 # router.register(r'userinfo', userinfo)
 
 

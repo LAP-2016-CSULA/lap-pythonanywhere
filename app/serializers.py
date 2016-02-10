@@ -79,14 +79,15 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Question
 
-
+"""
 class TreeSerializer(serializers.ModelSerializer):
-    """ Serializer of Tree. """
+    Serializer of Tree.
     species = SpeciesSerializer()
     class Meta:
         model = models.Tree
 
 class TreeSetterSerializer(serializers.ModelSerializer):
-    """ POST Serializer of Tree. """
+   POST Serializer of Tree. 
     class Meta:
         model = models.Tree
+"""
