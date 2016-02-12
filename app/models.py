@@ -64,6 +64,7 @@ class Tree(models.Model):
     long = models.FloatField()
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
+    image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -143,20 +144,20 @@ class DailyUpdate(models.Model):
     history = HistoricalRecords()
 
     #http://stackoverflow.com/questions/24373341/django-image-resizing-and-convert-before-upload
-    def save(self, *args, **kwargs):
-        """ Override save. Resize the image ratio """
-        if self.image:
-            image = Image.open(StringIO(self.image.read()))
-            #image = Image.open(io.BytesIO(self.image.read()))
-            #image = Image.open(self.image.path)
-            h = image.height
-            w = int(h * 2 / 3)
-            image.resize((w, h))
-            output = StringIO()
-            image.save(output, 'JPEG')
-            output.seek(0)
-            self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" %self.image.name, 'image/jpeg', output.len, None)
-        super(DailyUpdate, self).save(*args, **kwargs)
+    #def save(self, *args, **kwargs):
+    #    """ Override save. Resize the image ratio """
+    #    if self.image:
+    #        image = Image.open(StringIO(self.image.read()))
+    #        #image = Image.open(io.BytesIO(self.image.read()))
+    #        #image = Image.open(self.image.path)
+    #        h = image.height
+    #        w = int(h * 2 / 3)
+    #        image.resize((w, h))
+    #        output = StringIO()
+    #        image.save(output, 'JPEG')
+    #        output.seek(0)
+    #        self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" %self.image.name, 'image/jpeg', output.len, None)
+    #    super(DailyUpdate, self).save(*args, **kwargs)
 
     def __str__(self):
         """ display string. """
@@ -169,3 +170,16 @@ class DailyUpdate(models.Model):
     @_history_user.setter
     def _history_user(self,value):
         self.changed_by = value
+
+def link_image_to_tree(instance, created, raw, **kwargs):
+    """ Link the image from daily update to the tree if it exists. """
+    if instance:
+        tree = Tree.objects.get(pk=instance.tree.pk)
+        if tree:
+            tree.image = instance.image
+            tree.save()
+
+# link image to tree image
+models.signals.post_save.connect(link_image_to_tree, sender=DailyUpdate, dispatch_uid='link_image_to_tree')
+
+    
