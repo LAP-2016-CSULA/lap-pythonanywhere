@@ -7,7 +7,9 @@ Each models should have a history field of type HistoricalRecords to store the h
 from django.db import models
 from simple_history.models import HistoricalRecords
 from PIL import Image, ImageFile
-import os
+import io
+from io import StringIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from lap_django.settings import MEDIA_ROOT
 
 class SpeciesType(models.Model):
@@ -140,17 +142,21 @@ class DailyUpdate(models.Model):
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
+    #http://stackoverflow.com/questions/24373341/django-image-resizing-and-convert-before-upload
     def save(self, *args, **kwargs):
         """ Override save. Resize the image ratio """
+        if self.image:
+            image = Image.open(StringIO(self.image.read()))
+            #image = Image.open(io.BytesIO(self.image.read()))
+            #image = Image.open(self.image.path)
+            h = image.height
+            w = int(h * 2 / 3)
+            image.resize((w, h))
+            output = StringIO()
+            image.save(output, 'JPEG')
+            output.seek(0)
+            self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" %self.image.name, 'image/jpeg', output.len, None)
         super(DailyUpdate, self).save(*args, **kwargs)
-        #if self.image:
-        path = os.path.join(MEDIA_ROOT, self.image.path)
-        image = Image.open(path)
-        #image = Image.open(self.image.path)
-        h = image.height
-        w = int(h * 2 / 3)
-        image.resize((w, h))
-        image.save(path, 'JPEG')
 
     def __str__(self):
         """ display string. """
