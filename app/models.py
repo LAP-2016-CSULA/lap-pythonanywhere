@@ -175,7 +175,7 @@ def link_image_to_tree(instance, created, raw, **kwargs):
     """ Link the image from daily update to the tree if it exists. """
     if instance:
         tree = Tree.objects.get(pk=instance.tree.pk)
-        if tree:
+        if tree and instance.image:
             tree.image = instance.image
             tree.save()
 
