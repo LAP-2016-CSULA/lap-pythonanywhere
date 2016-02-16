@@ -13,6 +13,7 @@ Information needed:
 2. observation list
 3. accept image
 4. connect all species to the user who added information about them
+5. Put the information in an understandable csv format
 """
 
 from django.db import models
@@ -64,6 +65,8 @@ class SpecificSpecies(models.Model):
     def _history_user(self,value):
         self.changed_by = value
 
+
+#Connect with an observation class
 class Location(models.Model):
     """
     Location of each species instance
@@ -72,6 +75,12 @@ class Location(models.Model):
     species_latitude = models.FloatField()
     species_longitude = models.FloatField()
     history = HistoricalRecords()
+
+    def __str__(self):
+        """
+        display string
+        """
+        return str(self.species.common_name) + "'s location is " + str(self.species_latitude) + " latitude and " + str(self.species_longitude) + " longitude"
 
 """
 def create_choices_on_question_creation(instance, created, raw, **kwargs):
@@ -163,12 +172,26 @@ class Checklist(models.Model):
         """
         return str(self.species.type) + "'s Checklist"
 
+class DailyUpdateChecklist(models.Model):
+    """
+
+    """
+    main_species = models.ForeignKey(Checklist, related_name='%(class)s_main_species')
+    interacting_species = models.ManyToManyField(Checklist, related_name='%(class)s_interacting_species')
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """
+
+        """
+        return str(self.main_species)
+
 class DailyUpdate(models.Model):
     """
     
     """
     species = models.ForeignKey(SpecificSpecies)
-    checklist = models.ForeignKey(Checklist)
+    checklist = models.ForeignKey(DailyUpdateChecklist)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -184,6 +207,7 @@ class DailyUpdate(models.Model):
     @_history_user.setter
     def _history_user(self,value):
         self.changed_by = value
+
 """
 class DailyUpdate(models.Model):
     a tree daily update. each instance is bound to a specified tree.

@@ -79,6 +79,16 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Question
 
+class SpecificSpeciesSerializer(serializers.ModelSerializer):
+    """ Serializer of Specific Species"""
+    class Meta:
+        model = models.SpecificSpecies
+
+class DailyUpdateChecklistSerializer(serializers.ModelSerializer):
+    """Serializer of Daily Update Checklist"""
+    class Meta:
+        model = models.DailyUpdateChecklist
+
 """
 class TreeSerializer(serializers.ModelSerializer):
     Serializer of Tree.

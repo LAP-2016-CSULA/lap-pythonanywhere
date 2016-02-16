@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
 from .models import Species, Question, DailyUpdate
+from app.models import SpecificSpecies, DailyUpdateChecklist
 from .serializers import *
 
 from rest_framework import viewsets, permissions
@@ -90,6 +91,14 @@ class SpeciesViewSet(viewsets.ModelViewSet):
         else:
             return SpeciesSerializer
 
+class SpecificSpeciesViewSet(viewsets.ModelViewSet):
+    serializer_class = SpecificSpeciesSerializer
+    queryset = SpecificSpecies.objects.all()
+
+class DailyUpdateChecklistViewSet(viewsets.ModelViewSet):
+    serializer_class = DailyUpdateChecklistSerializer
+    queryset = DailyUpdateChecklist.objects.all()
+        
 # function based view
 @api_view(['GET', 'POST'])
 def userinfo(request):
