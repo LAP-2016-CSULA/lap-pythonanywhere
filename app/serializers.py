@@ -84,8 +84,15 @@ class SpecificSpeciesSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SpecificSpecies
 
+class ChecklistSerializer(serializers.ModelSerializer):
+    """Serializer for the Checklist"""
+    class Meta:
+        model = models.Checklist
+
 class DailyUpdateChecklistSerializer(serializers.ModelSerializer):
     """Serializer of Daily Update Checklist"""
+    type = ChecklistSerializer(read_only=True)
+
     class Meta:
         model = models.DailyUpdateChecklist
 

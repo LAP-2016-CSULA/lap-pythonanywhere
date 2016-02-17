@@ -92,10 +92,18 @@ class SpeciesViewSet(viewsets.ModelViewSet):
             return SpeciesSerializer
 
 class SpecificSpeciesViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     serializer_class = SpecificSpeciesSerializer
     queryset = SpecificSpecies.objects.all()
 
+class DailyUpdateChecklistFilter(django_filters.FilterSet):
+    type_id = django_filters.NumberFilter(NameError='type__id')
+    type_name = django_filters.CharFilter(NameError='type__name', lookup_type='iexact')
+
 class DailyUpdateChecklistViewSet(viewsets.ModelViewSet):
+    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = []
     serializer_class = DailyUpdateChecklistSerializer
     queryset = DailyUpdateChecklist.objects.all()
         

@@ -65,13 +65,16 @@ class SpecificSpecies(models.Model):
     def _history_user(self,value):
         self.changed_by = value
 
+"""
+class SpeciesInstance(models.Model):
+    species = models.ForeignKey(SpecificSpecies)
+"""
 
 #Connect with an observation class
 class Location(models.Model):
     """
     Location of each species instance
     """
-    species = models.ForeignKey(SpecificSpecies)
     species_latitude = models.FloatField()
     species_longitude = models.FloatField()
     history = HistoricalRecords()
