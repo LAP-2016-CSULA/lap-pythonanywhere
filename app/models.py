@@ -195,6 +195,9 @@ class DailyUpdate(models.Model):
     """
     species = models.ForeignKey(SpecificSpecies)
     checklist = models.ForeignKey(DailyUpdateChecklist)
+    species_latitude = models.FloatField()
+    species_longitude = models.FloatField()
+    
     history = HistoricalRecords()
 
     def __str__(self):
