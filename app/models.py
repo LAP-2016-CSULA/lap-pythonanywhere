@@ -18,6 +18,7 @@ Information needed:
 
 from django.db import models
 from simple_history.models import HistoricalRecords
+from datetime import datetime
 
 
 class SpeciesType(models.Model):
@@ -197,6 +198,7 @@ class DailyUpdate(models.Model):
     checklist = models.ForeignKey(DailyUpdateChecklist)
     species_latitude = models.FloatField()
     species_longitude = models.FloatField()
+    date_of_observation = models.DateTimeField(default=datetime.now, blank=True)
     
     history = HistoricalRecords()
 
