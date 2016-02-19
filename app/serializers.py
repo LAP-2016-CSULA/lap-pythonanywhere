@@ -90,3 +90,4 @@ class TreeSetterSerializer(serializers.ModelSerializer):
     """ POST Serializer of Tree. """
     class Meta:
         model = models.Tree
+        exclude = ('image',)
