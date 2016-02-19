@@ -56,7 +56,7 @@ class SpecificSpecies(models.Model):
         """
         display the species' name
         """
-        return self.common_name + ", CATEGORY(" + str(self.classification) + ")"
+        return str(self.id) + " " + self.common_name
 
     @property
     def _history_user(self):
@@ -167,6 +167,7 @@ class Checklist(models.Model):
     Has questions and choices
     """
     species = models.ForeignKey(Species)
+    specific_species = models.ForeignKey(SpeciesType)
     questions = models.ManyToManyField(Question)
     history = HistoricalRecords()
 
@@ -206,7 +207,7 @@ class DailyUpdate(models.Model):
          """
          display string. 
          """
-         return str(self.species.common_name) + "'s Observation"
+         return "Daily Update #" + str(self.id) + str(self.species.common_name)
 
     @property
     def _history_user(self):
