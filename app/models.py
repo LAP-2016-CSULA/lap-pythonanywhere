@@ -11,6 +11,7 @@ import io
 from io import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from lap_django.settings import MEDIA_ROOT
+from datetime import datetime
 
 class SpeciesType(models.Model):
     """ species type. """
@@ -58,9 +59,27 @@ class Question(models.Model):
 # Auto create 2 choices in the db coresponse to each question on its creation
 models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')       
 
+class TreeSpecies(models.Model):
+    species = models.ForeignKey(Species)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """
+        Shows bird information in a human-readable format
+        """
+        return self.species.name
+
+    @property
+    def _history_user(self):
+        return self.changed_by
+
+    @_history_user.setter
+    def _history_user(self,value):
+        self.changed_by = value 
+
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
-    species = models.ForeignKey(Species)
+    species = models.ForeignKey(TreeSpecies)
     long = models.FloatField()
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
@@ -69,7 +88,7 @@ class Tree(models.Model):
 
     def __str__(self):
         """ display species name and tree id. """
-        return self.species.name + ' [' + str(self.id) + '] found at lat, ' + str(self.long) + ' long' 
+        return self.species.species.name + ' [' + str(self.id) + '] found at lat ' + str(self.lat)  + ', ' + str(self.long) + ' long' 
 
     @property
     def _history_user(self):
@@ -111,20 +130,35 @@ class Choice(models.Model):
         """ display choice text. """
         return str(self.question) + '|' + str(self.value)
 
+class BirdChoice(models.Model):
+    choice = models.ForeignKey(Choice)
+
+    def __str__(self):
+        """ display choice text. """
+        return str(self.choice.question) + '|' + str(self.choice.value)
+
+class TreeChoice(models.Model):
+    choice = models.ForeignKey(Choice)
+
+    def __str__(self):
+        """ display choice text. """
+        return str(self.choice.question) + '|' + str(self.choice.value)
+
 class BirdObservation(models.Model):
     """
 
     """
     bird = models.ForeignKey(Bird)
     tree_observed_on = models.ManyToManyField(Tree, blank=False)
-    choices = models.ManyToManyField(Choice)
+    choices = models.ManyToManyField(BirdChoice)
+    date_of_observation = models.DateTimeField(default=datetime.now, blank=True)
     image = models.ImageField(max_length=None, null=True, blank=True)
 
     def __str__(self):
         """
 
         """
-        return "Observation of " + str(self.bird)
+        return "Observation " + str(self.id) + " of " + str(self.bird)
 
     @property
     def _history_user(self):
@@ -139,7 +173,7 @@ class DailyUpdate(models.Model):
     tree = models.ForeignKey(Tree)
     # added_by = models.ForeignKey('auth.User', related_name='creator')
     changed_by = models.ForeignKey('auth.User', related_name='modifier')
-    choices = models.ManyToManyField(Choice)
+    choices = models.ManyToManyField(TreeChoice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
