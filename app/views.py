@@ -1,5 +1,5 @@
 """
-Definition of views.
+Definition of views. 
 """
 
 from django.shortcuts import render

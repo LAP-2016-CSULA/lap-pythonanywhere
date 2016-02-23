@@ -1,5 +1,5 @@
 """
-Definition of urls for lap_django.
+Definition of urls for lap_django. 
 """
 
 from datetime import datetime

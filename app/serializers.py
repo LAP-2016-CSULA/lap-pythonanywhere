@@ -28,7 +28,7 @@ class SpeciesSetterSerializer(serializers.ModelSerializer):
         model = models.Species
 
 class BirdObservationSerializer(serializers.ModelSerializer):
-    """Serializer of Bird Observation"""
+    """Serializer of Bird Observation """
     class Meta:
         model = models.BirdObservation
         fields = ('bird', 'tree_observed_on', 'choices', 'date_of_observation')

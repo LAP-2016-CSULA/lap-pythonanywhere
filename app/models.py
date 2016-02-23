@@ -1,7 +1,7 @@
 """
 LAP Models.
 Each models should have a history field of type HistoricalRecords to store the history.
-
+ 
 """
 
 from django.db import models
