@@ -129,7 +129,7 @@ class CheckDBChangeView(APIView):
         serializer = CheckDBChangeSerializer()
         last_change_time_object = get_db_last_change_time()
         if last_change_time_object:
-            serializer.time = last_change_time_object.time
+            serializer = CheckDBChangeSerializer(last_change_time_object)
         return Response(serializer.data)
 
     def post(self, request):

@@ -15,7 +15,7 @@ import datetime
 
 class DBLastChangeTime(models.Model):
     """ Save last change time of the database. """
-    time = models.DateTimeField(null=True)
+    time = models.DateTimeField(auto_now=True)
 
 
 def get_db_last_change_time():
@@ -24,11 +24,12 @@ def get_db_last_change_time():
         o = DBLastChangeTime.objects.get(pk=1)
         return o
     except:
-        return None 
+        return None
 
 def set_db_last_change_time(instance, created, raw, **kwargs):
     t = get_db_last_change_time()
-    t = datetime.datetime.now
+    if not t:
+        t = DBLastChangeTime()
     t.save()
 
 
