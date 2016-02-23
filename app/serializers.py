@@ -27,6 +27,18 @@ class SpeciesSetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Species
 
+class BirdObservationSerializer(serializers.ModelSerializer):
+    """Serializer of Bird Observation"""
+    class Meta:
+        model = models.BirdObservation
+        fields = ('bird', 'tree_observed_on', 'choices', 'date_of_observation')
+        depth = 1
+
+class BirdObservationSetterSerializer(serializers.ModelSerializer):
+    """Serializer used in POST"""
+    class Meta:
+        model = models.BirdObservation
+
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
     """ Serializer of User. It excludes id and password. """

@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
-from .models import Species, Question, DailyUpdate, Tree
+from .models import Species, Question, DailyUpdate, Tree, BirdObservation
 from .serializers import *
 
 from rest_framework import viewsets, permissions
@@ -153,7 +153,17 @@ class DailyUpdateViewSet(viewsets.ModelViewSet):
         else:
             return DailyUpdateSerializer
 
+class BirdObservationViewSet(viewsets.ModelViewSet):
+    permission_classes = []
+    queryset = BirdObservation.objects.all()
+    serializer_class = BirdObservationSerializer
 
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return BirdObservationSetterSerializer
+        else:
+            return BirdObservationSerializer
 
 class TreeViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
