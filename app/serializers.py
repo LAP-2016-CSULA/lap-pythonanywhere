@@ -91,3 +91,8 @@ class TreeSetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tree
         exclude = ('image',)
+
+class CheckDBChangeSerializer(serializers.ModelSerializer):
+    time = serializers.DateTimeField()
+    class Meta:
+        model = None

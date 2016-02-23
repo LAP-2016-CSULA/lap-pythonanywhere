@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
 from .models import Species, Question, DailyUpdate, Tree
+from .models import get_db_last_change_time
 from .serializers import *
 
 from rest_framework import viewsets, permissions
@@ -119,6 +120,19 @@ class RegistrationView(APIView):
             return Response({'status' : 'success'})
         return Response({'status' : 'false'})
 
+
+class CheckDBChangeView(APIView):
+    permission_classes = []
+    required_scopes = []
+
+    def post(self, request):
+        serializer = CheckDBChangeSerializer(data=request.data)
+        if serializer.is_valid():
+            last_change_time_object = get_db_last_change_time()
+            time = serializer.validated_data.get('time', None)
+            if time < last_change_time_object.time:
+               return Response({'db_was_changed' : 'true'})
+        return Response({'db_was_change' : 'false'})
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]

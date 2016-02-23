@@ -11,6 +11,22 @@ import io
 from io import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from lap_django.settings import MEDIA_ROOT
+import datetime
+
+class DBLastChangeTime(models.Model):
+    """ Save last change time of the database. """
+    time = models.DateTimeField(null=True)
+
+
+def get_db_last_change_time():
+    """ Get the time of last change of the database. """
+    return DBLastChangeTime.objects.get(pk=1)
+
+def set_db_last_change_time(instance, created, raw, **kwargs):
+    t = get_db_last_change_time()
+    t = datetime.datetime.now
+    t.save()
+
 
 class SpeciesType(models.Model):
     """ species type. """
@@ -182,4 +198,10 @@ def link_image_to_tree(instance, created, raw, **kwargs):
 # link image to tree image
 models.signals.post_save.connect(link_image_to_tree, sender=DailyUpdate, dispatch_uid='link_image_to_tree')
 
-    
+
+# update db_last_change_time after every model's save
+models.signals.post_save.connect(set_db_last_change_time, sender=Tree, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=Question, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=Bird, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=DailyUpdate, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=Species, dispatch_uid='set_db_last_change_time')
