@@ -20,7 +20,11 @@ class DBLastChangeTime(models.Model):
 
 def get_db_last_change_time():
     """ Get the time of last change of the database. """
-    return DBLastChangeTime.objects.get(pk=1)
+    try:
+        o = DBLastChangeTime.objects.get(pk=1)
+        return o
+    except:
+        return None 
 
 def set_db_last_change_time(instance, created, raw, **kwargs):
     t = get_db_last_change_time()
