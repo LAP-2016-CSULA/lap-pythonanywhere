@@ -149,7 +149,7 @@ class BirdObservation(models.Model):
 
     """
     bird = models.ForeignKey(Bird)
-    tree_observed_on = models.ManyToManyField(Tree, blank=False)
+    tree_observed_on = models.ForeignKey(Tree, blank=False)
     choices = models.ManyToManyField(BirdChoice)
     date_of_observation = models.DateTimeField(default=datetime.now, blank=True)
     image = models.ImageField(max_length=None, null=True, blank=True)
