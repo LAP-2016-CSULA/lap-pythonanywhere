@@ -15,21 +15,23 @@ import datetime
 
 class DBLastChangeTime(models.Model):
     """ Save last change time of the database. """
+    type = models.CharField(max_length=30)
     time = models.DateTimeField(auto_now=True)
 
 
-def get_db_last_change_time():
+def get_db_last_change_time(type):
     """ Get the time of last change of the database. """
     try:
-        o = DBLastChangeTime.objects.get(pk=1)
+        o = DBLastChangeTime.objects.get(type=type)
         return o
     except:
         return None
 
 def set_db_last_change_time(instance, created, raw, **kwargs):
-    t = get_db_last_change_time()
+    t = get_db_last_change_time(instance.__class__.__name__)
     if not t:
         t = DBLastChangeTime()
+        t.type = instance.__class__.__name__
     t.save()
 
 

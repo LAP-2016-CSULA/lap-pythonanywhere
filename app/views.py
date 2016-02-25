@@ -126,11 +126,15 @@ class CheckDBChangeView(APIView):
     required_scopes = []
 
     def get(self, request):
-        serializer = CheckDBChangeSerializer()
-        last_change_time_object = get_db_last_change_time()
-        if last_change_time_object:
-            serializer = CheckDBChangeSerializer(last_change_time_object)
-        return Response(serializer.data)
+        #serializer = CheckDBChangeSerializer()
+        queryset = models.DBLastChangeTime.objects.all()
+        if queryset:
+            serializer = CheckDBChangeSerializer(queryset, many=True)
+        #if last_change_time_object:
+        #    serializer = CheckDBChangeSerializer(last_change_time_object)
+            return Response(serializer.data)
+        else:
+            return Response({})
 
     def post(self, request):
         serializer = CheckDBChangeSerializer(data=request.data)
