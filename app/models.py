@@ -84,6 +84,7 @@ class Tree(models.Model):
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
     image = models.ImageField(max_length=None, null=True, blank=True)
+    date_modified = models.DateTimeField(default=datetime.now(), blank=True)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -135,14 +136,13 @@ class BirdChoice(models.Model):
 
     def __str__(self):
         """ display choice text. """
-        return str(self.choice.question) + '|' + str(self.choice.value)
+        return str(self.choice)
 
 class TreeChoice(models.Model):
     choice = models.ForeignKey(Choice)
 
     def __str__(self):
-        """ display choice text. """
-        return str(self.choice.question) + '|' + str(self.choice.value)
+        return str(self.choice)
 
 class BirdObservation(models.Model):
     """
