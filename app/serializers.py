@@ -38,6 +38,7 @@ class BirdObservationSetterSerializer(serializers.ModelSerializer):
     """Serializer used in POST"""
     class Meta:
         model = models.BirdObservation
+        exclude = ('date_of_observation',)
 
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
