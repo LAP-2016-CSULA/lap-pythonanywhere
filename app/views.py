@@ -137,13 +137,18 @@ class CheckDBChangeView(APIView):
             return Response({})
 
     def post(self, request):
-        serializer = CheckDBChangeSerializer(data=request.data)
+        serializer = CheckDBChangeSetterSerializer(data=request.data)
         if serializer.is_valid():
-            last_change_time_object = get_db_last_change_time()
+            # tmp = models.DBLastChangeTime(**serializer.validated_data)
             time = serializer.validated_data.get('time', None)
-            if time < last_change_time_object.time:
-               return Response({'db_was_changed' : 'true'})
-        return Response({'db_was_change' : 'false'})
+            if not time:
+                return Response({})
+            queryset = models.DBLastChangeTime.objects.filter(time__gt=time)
+            if queryset:
+                serializer = CheckDBChangeSerializer(queryset, many=True)
+                return Response(serializer.data)
+        return Response({})
+
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]

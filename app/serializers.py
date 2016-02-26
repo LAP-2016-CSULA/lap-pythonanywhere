@@ -96,3 +96,17 @@ class CheckDBChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DBLastChangeTime
         exclude = ('id',)
+
+class CheckDBChangeSetterSerializer(serializers.ModelSerializer):
+    time = serializers.DateTimeField()
+    class Meta:
+        model = models.DBLastChangeTime
+        exclude = ('type', 'id',)
+
+class CheckDBSerializer(serializers.Serializer):
+    db_was_changed = serializers.BooleanField()
+    list = serializers.ReturnList
+
+
+class DateTimeSerializer(serializers.Serializer):
+    time = serializers.DateTimeField()
