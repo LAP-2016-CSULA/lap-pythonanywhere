@@ -11,7 +11,28 @@ import io
 from io import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from lap_django.settings import MEDIA_ROOT
-from datetime import datetime
+import datetime
+class DBLastChangeTime(models.Model):
+    """ Save last change time of the database. """
+    type = models.CharField(max_length=30)
+    time = models.DateTimeField(auto_now=True)
+
+
+def get_db_last_change_time(type):
+    """ Get the time of last change of the database. """
+    try:
+        o = DBLastChangeTime.objects.get(type=type)
+        return o
+    except:
+        return None
+
+def set_db_last_change_time(instance, created, raw, **kwargs):
+    t = get_db_last_change_time(instance.__class__.__name__)
+    if not t:
+        t = DBLastChangeTime()
+        t.type = instance.__class__.__name__
+    t.save()
+
 
 class SpeciesType(models.Model):
     """ species type. """
@@ -84,7 +105,7 @@ class Tree(models.Model):
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
     image = models.ImageField(max_length=None, null=True, blank=True)
-    date_modified = models.DateTimeField(default=datetime.now(), blank=True)
+    date_modified = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -216,4 +237,13 @@ def link_image_to_tree(instance, created, raw, **kwargs):
 # link image to tree image
 models.signals.post_save.connect(link_image_to_tree, sender=DailyUpdate, dispatch_uid='link_image_to_tree')
 
-    
+
+# update db_last_change_time after every model's save
+models.signals.post_save.connect(set_db_last_change_time, sender=Tree, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=Question, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=Bird, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=DailyUpdate, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=Species, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=TreeSpecies, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=BirdObservation, dispatch_uid='set_db_last_change_time')
+
