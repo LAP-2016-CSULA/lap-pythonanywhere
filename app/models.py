@@ -89,7 +89,7 @@ class Tree(models.Model):
 
     def __str__(self):
         """ display species name and tree id. """
-        return self.species.species.name + ' [' + str(self.id) + '] found at lat ' + str(self.lat)  + ', ' + str(self.long) + ' long' 
+        return str(self.species) + ' [' + str(self.id) + '] found at lat ' + str(self.lat)  + ', ' + str(self.long) + ' long' 
 
     @property
     def _history_user(self):
