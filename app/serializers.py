@@ -27,6 +27,19 @@ class SpeciesSetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Species
 
+class BirdObservationSerializer(serializers.ModelSerializer):
+    """Serializer of Bird Observation """
+    class Meta:
+        model = models.BirdObservation
+        fields = ('bird', 'tree_observed_on', 'choices', 'date_of_observation')
+        depth = 1
+
+class BirdObservationSetterSerializer(serializers.ModelSerializer):
+    """Serializer used in POST"""
+    class Meta:
+        model = models.BirdObservation
+        exclude = ('date_of_observation',)
+
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
     """ Serializer of User. It excludes id and password. """
@@ -58,11 +71,16 @@ class ChoiceSetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Choice
 
+class TreeChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TreeChoice
+        depth = 1
+
 
 # http://stackoverflow.com/questions/14978464/django-rest-nested-object-add-on-create-post-not-just-update-put
 class DailyUpdateSerializer(serializers.ModelSerializer):
     """ Serializer of Daily Update. """
-    choices = ChoiceSerializer(many=True)
+    choices = TreeChoiceSerializer(many=True)
     class Meta:
         model = models.DailyUpdate
 

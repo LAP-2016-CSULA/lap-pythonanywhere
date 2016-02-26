@@ -1,5 +1,5 @@
 """
-Definition of urls for lap_django.
+Definition of urls for lap_django. 
 """
 
 from datetime import datetime
@@ -27,6 +27,7 @@ router.register(r'species', SpeciesViewSet)
 router.register(r'questions', QuestionViewSet)
 router.register(r'dailyupdates', DailyUpdateViewSet)
 router.register(r'trees', TreeViewSet)
+router.register(r'birdobservation', BirdObservationViewSet)
 # router.register(r'userinfo', userinfo)
 
 
