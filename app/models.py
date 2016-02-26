@@ -79,7 +79,7 @@ class TreeSpecies(models.Model):
 
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
-    species = models.ForeignKey(TreeSpecies)
+    species = models.ForeignKey(Species)
     long = models.FloatField()
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
@@ -173,7 +173,7 @@ class DailyUpdate(models.Model):
     tree = models.ForeignKey(Tree)
     # added_by = models.ForeignKey('auth.User', related_name='creator')
     changed_by = models.ForeignKey('auth.User', related_name='modifier')
-    choices = models.ManyToManyField(TreeChoice)
+    choices = models.ManyToManyField(Choice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 
