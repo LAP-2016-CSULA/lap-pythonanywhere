@@ -105,7 +105,7 @@ class Tree(models.Model):
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
     image = models.ImageField(max_length=None, null=True, blank=True)
-    date_modified = models.DateTimeField(default=datetime.now(), blank=True)
+    date_modified = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -244,4 +244,6 @@ models.signals.post_save.connect(set_db_last_change_time, sender=Question, dispa
 models.signals.post_save.connect(set_db_last_change_time, sender=Bird, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=DailyUpdate, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=Species, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=TreeSpecies, dispatch_uid='set_db_last_change_time')
+models.signals.post_save.connect(set_db_last_change_time, sender=BirdObservation, dispatch_uid='set_db_last_change_time')
 
