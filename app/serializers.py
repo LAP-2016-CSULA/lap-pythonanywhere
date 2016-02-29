@@ -122,6 +122,8 @@ class QuestionSerializer(serializers.ModelSerializer):
     """ Serializer of Question. """
     choices = ChoiceSerializer(source='choice_set', many=True, read_only=True)
     class Meta:
+        model = models.Question
+
 
 class CheckDBChangeSerializer(serializers.ModelSerializer):
     class Meta:
