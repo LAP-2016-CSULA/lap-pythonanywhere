@@ -69,7 +69,7 @@ def about(request):
 class BirdFilter(django_filters.FilterSet):
     """A filter for the bird view"""
     type_id = django_filters.NumberFilter(name='type__id')
-    type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
+    type_name = django_filters.CharFilter(name='type__name')
 
     class Meta:
         model = Bird
@@ -90,12 +90,13 @@ class BirdViewSet(viewsets.ModelViewSet):
 
 class TreeSpeciesFilter(django_filters.FilterSet):
     """A filter for the tree species view"""
-    type_id = django_filters.NumberFilter(name='typr__id')
+    type_id = django_filters.NumberFilter(name='type__id')
     type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
 
 class TreeSpeciesViewSet(viewsets.ModelViewSet):
     """The viewset for the tree species"""
-    permission_class = []
+    #permission_class = []
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     queryset = TreeSpecies.objects.all()
     serializer_class = TreeSpeciesSerializer
     filter_class = TreeSpeciesFilter
