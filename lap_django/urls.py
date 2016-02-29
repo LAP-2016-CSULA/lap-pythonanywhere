@@ -23,11 +23,12 @@ from django.conf.urls import include
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
-router.register(r'species', SpeciesViewSet)
 router.register(r'questions', QuestionViewSet)
 router.register(r'dailyupdates', DailyUpdateViewSet)
 router.register(r'trees', TreeViewSet)
 router.register(r'birdobservation', BirdObservationViewSet)
+router.register(r'bird', BirdViewSet)
+router.register(r'treespecies', TreeSpeciesViewSet)
 # router.register(r'userinfo', userinfo)
 
 
