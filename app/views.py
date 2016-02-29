@@ -94,6 +94,9 @@ class TreeSpeciesFilter(django_filters.FilterSet):
     type_id = django_filters.NumberFilter(name='type__id')
     type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
 
+    class Meta:
+        model = TreeSpecies
+
 class TreeSpeciesViewSet(viewsets.ModelViewSet):
     """The viewset for the tree species"""
     permission_classes = []
