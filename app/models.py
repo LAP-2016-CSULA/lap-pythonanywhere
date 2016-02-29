@@ -233,7 +233,7 @@ models.signals.post_save.connect(set_db_last_change_time, sender=Tree, dispatch_
 models.signals.post_save.connect(set_db_last_change_time, sender=Question, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=Bird, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=DailyUpdate, dispatch_uid='set_db_last_change_time')
-models.signals.post_save.connect(set_db_last_change_time, sender=Species, dispatch_uid='set_db_last_change_time')
+#models.signals.post_save.connect(set_db_last_change_time, sender=Species, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=TreeSpecies, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=BirdObservation, dispatch_uid='set_db_last_change_time')
 
