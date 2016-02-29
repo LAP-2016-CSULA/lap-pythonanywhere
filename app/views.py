@@ -96,7 +96,7 @@ class TreeSpeciesFilter(django_filters.FilterSet):
 
 class TreeSpeciesViewSet(viewsets.ModelViewSet):
     """The viewset for the tree species"""
-    permission_class = []
+    permission_classes = []
     #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     queryset = TreeSpecies.objects.all()
     serializer_class = TreeSpeciesSerializer
