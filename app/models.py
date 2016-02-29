@@ -43,20 +43,6 @@ class SpeciesType(models.Model):
         """ display the category name of the species e.g. bird. """
         return self.name
 
-
-class Species(models.Model):
-    """ species model. """
-    type = models.ForeignKey(SpeciesType)
-    scientific_name = models.CharField(max_length=100)
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=2048)
-    image = models.ImageField(max_length=None, null=True, blank=True, upload_to='species')
-    history = HistoricalRecords()
-
-    def __str__(self):
-        """ display name. """
-        return self.name
-
 def create_choices_on_question_creation(instance, created, raw, **kwargs):
     """ Create 2 choices for each question.
     Check post_save in the django documentation for the parameter
@@ -81,14 +67,16 @@ class Question(models.Model):
 models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')       
 
 class TreeSpecies(models.Model):
-    species = models.ForeignKey(Species)
+    type = models.ForeignKey(SpeciesType)
+    scientific_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=2048)
+    image = models.ImageField(max_length=None, null=True, blank=True, upload_to='species')
     history = HistoricalRecords()
 
     def __str__(self):
-        """
-        Shows bird information in a human-readable format
-        """
-        return self.species.name
+        """ display name. """
+        return "[" + str(self.id) + "] " + self.name
 
     @property
     def _history_user(self):
@@ -100,7 +88,7 @@ class TreeSpecies(models.Model):
 
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
-    species = models.ForeignKey(Species)
+    species = models.ForeignKey(TreeSpecies)
     long = models.FloatField()
     lat = models.FloatField()
     changed_by = models.ForeignKey('auth.User')
@@ -110,7 +98,7 @@ class Tree(models.Model):
 
     def __str__(self):
         """ display species name and tree id. """
-        return str(self.species) + ' [' + str(self.id) + '] found at lat ' + str(self.lat)  + ', ' + str(self.long) + ' long' 
+        return str(self.species) + ' observation # [' + str(self.id) + '] found at lat ' + str(self.lat)  + ', ' + str(self.long) + ' long' 
 
     @property
     def _history_user(self):
@@ -123,16 +111,18 @@ class Tree(models.Model):
 
 class Bird(models.Model):
     """
-    A bird instance. It should contain the the tree instance it was interacting with.
+    
     """
-    species = models.ForeignKey(Species)
+    type = models.ForeignKey(SpeciesType)
+    scientific_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=2048)
+    image = models.ImageField(max_length=None, null=True, blank=True, upload_to='species')
     history = HistoricalRecords()
 
     def __str__(self):
-        """
-        Shows bird information in a human-readable format
-        """
-        return self.species.name
+        """ display name. """
+        return "[" + str(self.id) + "] " + self.name
 
     @property
     def _history_user(self):
@@ -179,7 +169,7 @@ class BirdObservation(models.Model):
         """
 
         """
-        return "Observation " + str(self.id) + " of " + str(self.bird)
+        return "Observation " + str(self.id) + " of " + str(self.bird) + " on " + str(self.tree_observed_on)
 
     @property
     def _history_user(self):
@@ -194,7 +184,7 @@ class DailyUpdate(models.Model):
     tree = models.ForeignKey(Tree)
     # added_by = models.ForeignKey('auth.User', related_name='creator')
     changed_by = models.ForeignKey('auth.User', related_name='modifier')
-    choices = models.ManyToManyField(Choice)
+    choices = models.ManyToManyField(TreeChoice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
 

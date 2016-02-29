@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
-from .models import Species, Question, DailyUpdate, Tree, BirdObservation
+from .models import Question, DailyUpdate, Tree, BirdObservation, Bird, TreeSpecies
 from .models import get_db_last_change_time
 from .serializers import *
 
@@ -67,29 +67,47 @@ def about(request):
         })
     )
 
+class BirdFilter(django_filters.FilterSet):
+    """A filter for the bird view"""
+    type_id = django_filters.NumberFilter(name='type__id')
+    type_name = django_filters.CharFilter(name='type__name')
 
-class SpeciesFilter(django_filters.FilterSet):
-    """ Special filter for species view. """
+    class Meta:
+        model = Bird
+
+class BirdViewSet(viewsets.ModelViewSet):
+    """Viewset for the birds"""
+    permission_classes = []
+    queryset = Bird.objects.all()
+    serializer_class = BirdSerializer
+    filter_class = BirdFilter
+
+    def get_serializer_class(self):
+        action_List = ['create', 'update']
+        if self.action in action_List:
+            return BirdSetterSerializer
+        else:
+            return BirdSerializer
+
+class TreeSpeciesFilter(django_filters.FilterSet):
+    """A filter for the tree species view"""
     type_id = django_filters.NumberFilter(name='type__id')
     type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
 
-    class Meta:
-        model = Species
-        
-
-class SpeciesViewSet(viewsets.ModelViewSet):
-    permission_classes = []
-    required_scopes = []
-    queryset = Species.objects.all()
-    serializer_class = SpeciesSerializer
-    filter_class = SpeciesFilter
+class TreeSpeciesViewSet(viewsets.ModelViewSet):
+    """The viewset for the tree species"""
+    #permission_class = []
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    queryset = TreeSpecies.objects.all()
+    serializer_class = TreeSpeciesSerializer
+    filter_class = TreeSpeciesFilter
 
     def get_serializer_class(self):
         action_list = ['create', 'update']
         if self.action in action_list:
-            return SpeciesSetterSerializer
+            return TreeSpeciesSetterSerializer   
         else:
-            return SpeciesSerializer
+            return TreeSpeciesSerializer
 
 # function based view
 @api_view(['GET', 'POST'])

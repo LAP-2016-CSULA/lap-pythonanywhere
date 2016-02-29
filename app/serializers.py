@@ -7,32 +7,74 @@ from rest_framework import permissions, routers, serializers, viewsets
 
 from django.contrib.auth.models import User, Group
 
-
 class SpeciesTypeSerializer(serializers.ModelSerializer):
-    """ Serializer of Species Type. """
+    """Seralizer for the Species type"""
     class Meta:
         model = models.SpeciesType
 
+class BirdSetterSerializer(serializers.ModelSerializer):
+    """POST Serializer of Species"""
+    class Meta:
+        model = models.Bird
 
-class SpeciesSerializer(serializers.ModelSerializer):
-    """ Serializer of Spcies. """
-    #type = serializers.SlugRelatedField(slug_field='name', queryset=models.SpeciesType.objects.all())
+class BirdSerializer(serializers.ModelSerializer):
+    """Serializer for the Bird module"""
     type = SpeciesTypeSerializer(read_only=True)
-    class Meta:
-        model = models.Species
-        # depth = 1
 
-class SpeciesSetterSerializer(serializers.ModelSerializer):
-    """ POST Serializer of Species. """
     class Meta:
-        model = models.Species
+        model = models.Bird
+
+class TreeSpeciesSetterSerializer(serializers.ModelSerializer):
+    """POST Serializer for Tree Species"""
+    class Meta:
+        model = models.TreeSpecies
+
+class TreeSpeciesSerializer(serializers.ModelSerializer):
+    """Serializer for the Tree Species module"""
+    type = SpeciesTypeSerializer(read_only=True)
+
+    class Meta:
+        model = models.TreeSpecies
+
+class TreeSerializer(serializers.ModelSerializer):
+    """ Serializer of Tree. """
+    species = TreeSpeciesSerializer(read_only=True)
+    class Meta:
+        model = models.Tree
+
+class TreeSetterSerializer(serializers.ModelSerializer):
+    """ POST Serializer of Tree. """
+    class Meta:
+        model = models.Tree
+        exclude = ('image',)
+
+class ChoiceSerializer(serializers.ModelSerializer):
+    """ Serializer of choice. """
+    question = serializers.StringRelatedField()
+    class Meta:
+        model = models.Choice
+
+
+class ChoiceSetterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Choice
+
+class TreeChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TreeChoice
+
+class BirdChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BirdChoice
 
 class BirdObservationSerializer(serializers.ModelSerializer):
     """Serializer of Bird Observation """
+    bird = BirdSerializer(read_only=True)
+    tree = TreeSerializer(read_only=True)
+    choice = BirdChoiceSerializer(read_only=True)
+
     class Meta:
         model = models.BirdObservation
-        fields = ('bird', 'tree_observed_on', 'choices', 'date_of_observation')
-        depth = 1
 
 class BirdObservationSetterSerializer(serializers.ModelSerializer):
     """Serializer used in POST"""
@@ -59,30 +101,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'password', 'email')
 
-
-class ChoiceSerializer(serializers.ModelSerializer):
-    """ Serializer of choice. """
-    question = serializers.StringRelatedField()
-    class Meta:
-        model = models.Choice
-
-
-class ChoiceSetterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Choice
-
-class TreeChoiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.TreeChoice
-        depth = 1
-
-
 # http://stackoverflow.com/questions/14978464/django-rest-nested-object-add-on-create-post-not-just-update-put
 class DailyUpdateSerializer(serializers.ModelSerializer):
     """ Serializer of Daily Update. """
     choices = TreeChoiceSerializer(many=True)
+
     class Meta:
         model = models.DailyUpdate
+        exclude = ('changed_by', 'image',)
+        #depth = 3
 
 
 class DailyUpdateSetterSerializer(serializers.ModelSerializer):
@@ -95,20 +122,6 @@ class QuestionSerializer(serializers.ModelSerializer):
     """ Serializer of Question. """
     choices = ChoiceSerializer(source='choice_set', many=True, read_only=True)
     class Meta:
-        model = models.Question
-
-
-class TreeSerializer(serializers.ModelSerializer):
-    """ Serializer of Tree. """
-    species = SpeciesSerializer()
-    class Meta:
-        model = models.Tree
-
-class TreeSetterSerializer(serializers.ModelSerializer):
-    """ POST Serializer of Tree. """
-    class Meta:
-        model = models.Tree
-        exclude = ('image',)
 
 class CheckDBChangeSerializer(serializers.ModelSerializer):
     class Meta:
