@@ -108,7 +108,7 @@ class DailyUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.DailyUpdate
-        exclude = ('changed_by', 'image',)
+        #exclude = ('changed_by', 'image',)
         #depth = 3
 
 
