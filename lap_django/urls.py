@@ -68,6 +68,7 @@ urlpatterns = [
     # custom API
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
+    url(r'^checkdb', CheckDBChangeView.as_view(), name='checkdb'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
