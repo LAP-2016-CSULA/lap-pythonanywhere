@@ -62,7 +62,15 @@ class TreeChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TreeChoice
 
+class TreeChoiceSetterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TreeChoice
+
 class BirdChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BirdChoice
+
+class BirdChoiceSetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BirdChoice
 

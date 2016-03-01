@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
-from .models import Question, DailyUpdate, Tree, BirdObservation, Bird, TreeSpecies
+from .models import Question, DailyUpdate, Tree, BirdObservation, Bird, TreeSpecies, BirdChoice,TreeChoice
 from .models import get_db_last_change_time
 from .serializers import *
 
@@ -226,4 +226,27 @@ class TreeViewSet(viewsets.ModelViewSet):
         else:
             return TreeSerializer
 
+class BirdChoiceViewSet(viewsets.ModelViewSet):
+    permission_classes = []
+    queryset = BirdChoice.objects.all()
+    serializer_class = BirdChoiceSerializer
 
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return BirdChoiceSetterSerializer
+        else:
+            return BirdChoiceSerializer
+
+class TreeChoiceViewSet(viewsets.ModelViewSet):
+    permission_classes = []
+    queryset = TreeChoice.objects.all()
+    serializer_class = TreeChoiceSerializer
+
+    def get_serializer_class(self):
+        action_list = ['create', 'update']
+        if self.action in action_list:
+            return TreeChoiceSetterSerializer
+        else:
+            return TreeChoiceSerializer
+    

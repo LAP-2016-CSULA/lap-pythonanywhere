@@ -155,6 +155,7 @@ class TreeChoice(models.Model):
     def __str__(self):
         return str(self.choice)
 
+
 class BirdObservation(models.Model):
     """
 

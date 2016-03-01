@@ -29,6 +29,8 @@ router.register(r'trees', TreeViewSet)
 router.register(r'birdobservation', BirdObservationViewSet)
 router.register(r'bird', BirdViewSet)
 router.register(r'treespecies', TreeSpeciesViewSet)
+router.register(r'treechoices', TreeChoiceViewSet)
+router.register(r'birdchoices', BirdChoiceViewSet)
 # router.register(r'userinfo', userinfo)
 
 
