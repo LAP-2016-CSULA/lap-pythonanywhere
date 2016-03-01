@@ -46,7 +46,6 @@ class TreeSetterSerializer(serializers.ModelSerializer):
     """ POST Serializer of Tree. """
     class Meta:
         model = models.Tree
-        exclude = ('image',)
 
 class ChoiceSerializer(serializers.ModelSerializer):
     """ Serializer of choice. """
@@ -108,7 +107,6 @@ class DailyUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.DailyUpdate
-        exclude = ('changed_by', 'image',)
         #depth = 3
 
 
