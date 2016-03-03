@@ -160,7 +160,7 @@ class BirdObservation(models.Model):
 
     """
     bird = models.ForeignKey(Bird)
-    changed_by = models.ForeignKey('auth.User', related_name='modifier')
+    changed_by = models.ForeignKey('auth.User')
     tree_observed_on = models.ForeignKey(Tree, blank=False)
     choices = models.ManyToManyField(BirdChoice)
     date_of_observation = models.DateTimeField(auto_now=True)
@@ -183,7 +183,7 @@ class BirdObservation(models.Model):
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
     tree = models.ForeignKey(Tree)
-    changed_by = models.ForeignKey('auth.User', related_name='modifier')
+    changed_by = models.ForeignKey('auth.User')
     choices = models.ManyToManyField(TreeChoice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     history = HistoricalRecords()
