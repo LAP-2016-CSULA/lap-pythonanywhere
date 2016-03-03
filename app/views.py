@@ -223,6 +223,13 @@ class BirdObservationViewSet(viewsets.ModelViewSet):
         else:
             return BirdObservationSerializer
 
+    def perform_create(self, serializer):
+        auto_user(self, serializer)
+
+    def perform_update(self, serializer):
+        auto_user(self, serializer)
+
+
 class TreeViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     permission_classes = []
