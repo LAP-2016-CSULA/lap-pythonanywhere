@@ -164,7 +164,7 @@ class BirdObservation(models.Model):
     tree_observed_on = models.ForeignKey(Tree, blank=False)
     choices = models.ManyToManyField(BirdChoice)
     date_of_observation = models.DateTimeField(auto_now=True)
-    # image = models.ImageField(max_length=None, null=True, blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         """
@@ -186,6 +186,7 @@ class DailyUpdate(models.Model):
     changed_by = models.ForeignKey('auth.User')
     choices = models.ManyToManyField(TreeChoice)
     image = models.ImageField(max_length=None, null=True, blank=True)
+    date_of_observation = models.DateTimeField(auto_now=True)    
     history = HistoricalRecords()
 
     def __str__(self):
