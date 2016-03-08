@@ -39,6 +39,8 @@ class TreeSpeciesSerializer(serializers.ModelSerializer):
 class TreeSerializer(serializers.ModelSerializer):
     """ Serializer of Tree. """
     species = TreeSpeciesSerializer(read_only=True)
+    changed_by = serializers.StringRelatedField()
+
     class Meta:
         model = models.Tree
 
@@ -72,6 +74,7 @@ class BirdObservationSerializer(serializers.ModelSerializer):
     bird = BirdSerializer(read_only=True)
     tree = TreeSerializer(read_only=True)
     choice = BirdChoiceSerializer(read_only=True)
+    changed_by = serializers.StringRelatedField()
 
     class Meta:
         model = models.BirdObservation
@@ -105,6 +108,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class DailyUpdateSerializer(serializers.ModelSerializer):
     """ Serializer of Daily Update. """
     choices = TreeChoiceSerializer(many=True)
+    changed_by = serializers.StringRelatedField()
 
     class Meta:
         model = models.DailyUpdate

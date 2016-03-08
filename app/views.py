@@ -91,8 +91,10 @@ class BirdViewSet(viewsets.ModelViewSet):
 
 class TreeSpeciesFilter(django_filters.FilterSet):
     """A filter for the tree species view"""
-    type_id = django_filters.NumberFilter(name='type__id')
-    type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
+    #type_id = django_filters.NumberFilter(name='type__id')
+    #type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
+    added_by = django_filters.CharFilter(name='changed_by__username', lookup_type='iexact')
+    #time = django_filters.DateTimeFilter(name='date_modified', lookup_type='gt')
 
     class Meta:
         model = TreeSpecies

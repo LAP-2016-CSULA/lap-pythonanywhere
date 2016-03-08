@@ -124,13 +124,13 @@ class Bird(models.Model):
         """ display name. """
         return "[" + str(self.id) + "] " + self.name
 
-    @property
-    def _history_user(self):
-        return self.changed_by
+    #@property
+    #def _history_user(self):
+    #    return self.changed_by
 
-    @_history_user.setter
-    def _history_user(self,value):
-        self.changed_by = value
+    #@_history_user.setter
+    #def _history_user(self,value):
+    #    self.changed_by = value
 
 class Choice(models.Model):
     """ choices. """
