@@ -160,10 +160,11 @@ class BirdObservation(models.Model):
 
     """
     bird = models.ForeignKey(Bird)
+    changed_by = models.ForeignKey('auth.User')
     tree_observed_on = models.ForeignKey(Tree, blank=False)
     choices = models.ManyToManyField(BirdChoice)
     date_of_observation = models.DateTimeField(auto_now=True)
-    # image = models.ImageField(max_length=None, null=True, blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         """
@@ -182,27 +183,11 @@ class BirdObservation(models.Model):
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
     tree = models.ForeignKey(Tree)
-    # added_by = models.ForeignKey('auth.User', related_name='creator')
-    changed_by = models.ForeignKey('auth.User', related_name='modifier')
+    changed_by = models.ForeignKey('auth.User')
     choices = models.ManyToManyField(TreeChoice)
     image = models.ImageField(max_length=None, null=True, blank=True)
+    date_of_observation = models.DateTimeField(auto_now=True)    
     history = HistoricalRecords()
-
-    #http://stackoverflow.com/questions/24373341/django-image-resizing-and-convert-before-upload
-    #def save(self, *args, **kwargs):
-    #    """ Override save. Resize the image ratio """
-    #    if self.image:
-    #        image = Image.open(StringIO(self.image.read()))
-    #        #image = Image.open(io.BytesIO(self.image.read()))
-    #        #image = Image.open(self.image.path)
-    #        h = image.height
-    #        w = int(h * 2 / 3)
-    #        image.resize((w, h))
-    #        output = StringIO()
-    #        image.save(output, 'JPEG')
-    #        output.seek(0)
-    #        self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" %self.image.name, 'image/jpeg', output.len, None)
-    #    super(DailyUpdate, self).save(*args, **kwargs)
 
     def __str__(self):
         """ display string. """

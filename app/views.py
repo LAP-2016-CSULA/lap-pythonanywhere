@@ -204,6 +204,13 @@ class DailyUpdateViewSet(viewsets.ModelViewSet):
         else:
             return DailyUpdateSerializer
 
+    def perform_create(self, serializer):
+        auto_user(self, serializer)
+
+    def perform_update(self, serializer):
+        auto_user(self, serializer)
+
+
 class BirdObservationViewSet(viewsets.ModelViewSet):
     permission_classes = []
     queryset = BirdObservation.objects.all()
@@ -215,6 +222,13 @@ class BirdObservationViewSet(viewsets.ModelViewSet):
             return BirdObservationSetterSerializer
         else:
             return BirdObservationSerializer
+
+    def perform_create(self, serializer):
+        auto_user(self, serializer)
+
+    def perform_update(self, serializer):
+        auto_user(self, serializer)
+
 
 class TreeViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
@@ -229,4 +243,36 @@ class TreeViewSet(viewsets.ModelViewSet):
         else:
             return TreeSerializer
 
+    def perform_create(self, serializer):
+        auto_user(self, serializer)
 
+    def perform_update(self, serializer):
+        auto_user(self, serializer)
+
+
+def auto_user(obj, serializer):
+    """
+    This method adds the user (whether authenticated user or guest) to serializer and save it.
+    The models must contain a django.contrib.auth.models.User field named 'changed_by'.
+    It should be called in ViewSet's perform_create and perform_update.
+    It is best to exclude User from the serializer (request's data) when using this method
+    """
+    if obj.request.user.is_authenticated():
+        serializer.save(changed_by=self.request.user)
+    else:
+        user = get_or_create_guest_user()
+        serializer.save(changed_by=user)
+
+def get_or_create_guest_user():
+    """
+    Try to get the 'guest' user. If 'guest' is not found in the database, create new one
+    and return it.
+    """
+    try:
+        guest = User.objects.get(username='guest')
+    except User.DoesNotExist:
+        guest = User.objects.create(username='guest', email='this_is_guest_email@calstatela.edu')
+        # Use set_password() to hash raw password
+        guest.set_password('guest_password')
+        guest.save()
+    return guest

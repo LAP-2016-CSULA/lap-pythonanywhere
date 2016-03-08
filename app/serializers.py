@@ -46,7 +46,7 @@ class TreeSetterSerializer(serializers.ModelSerializer):
     """ POST Serializer of Tree. """
     class Meta:
         model = models.Tree
-        exclude = ('image',)
+        exclude = ('image', 'changed_by',)
 
 class ChoiceSerializer(serializers.ModelSerializer):
     """ Serializer of choice. """
@@ -80,7 +80,7 @@ class BirdObservationSetterSerializer(serializers.ModelSerializer):
     """Serializer used in POST"""
     class Meta:
         model = models.BirdObservation
-        exclude = ('date_of_observation',)
+        exclude = ('date_of_observation', 'changed_by',)
 
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
@@ -108,14 +108,13 @@ class DailyUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.DailyUpdate
-        #exclude = ('changed_by', 'image',)
-        #depth = 3
 
 
 class DailyUpdateSetterSerializer(serializers.ModelSerializer):
     """ Serializer of daily update. This one is used in post. """
     class Meta:
         model = models.DailyUpdate
+        exclude = ('changed_by',)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
