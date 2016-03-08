@@ -57,6 +57,7 @@ def create_choices_on_question_creation(instance, created, raw, **kwargs):
 class Question(models.Model):
     """ species' category. """
     text = models.CharField(max_length=255)
+    type = models.ForeignKey(SpeciesType)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -64,7 +65,28 @@ class Question(models.Model):
         return self.text
 
 # Auto create 2 choices in the db coresponse to each question on its creation
-models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')       
+#models.signals.post_save.connect(create_choices_on_question_creation, sender=Question, dispatch_uid='create_choices_on_question_creation')       
+
+def create_choices_for_specific_species_question(sender, instance, created, raw, **kwargs):
+    """
+
+    """
+    species_type = instance.type
+    if created:
+        if species_type == 'Bird':
+            c1 = BirdChoice(question=instance, value=True)
+            c2 = BirdChoice(question=instance, value=False)
+            c1.save()
+            c2.save()
+        elif species_type == 'Plant':
+            c1 = TreeChoice(question=instance, value=True)
+            c2 = TreeChoice(question=instance, value=True)
+            c1.save()
+            c2.save()
+        
+
+#Auto create 2 choices on either Tree Choice or Bird Choice depending on the type of question
+models.signals.post_save.connect(create_choices_for_specific_species_question, sender=Question, dispatch_uid='create_choices_for_specific_species_question')
 
 class TreeSpecies(models.Model):
     type = models.ForeignKey(SpeciesType)

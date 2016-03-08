@@ -6,6 +6,8 @@ from django.core.exceptions import PermissionDenied
 from . import models
 
 #Copied from http://stackoverflow.com/questions/18685223/how-to-export-django-model-data-into-csv-file
+#Clients want the information in this format:
+#ObservationID, Date, [tree] SpeciesID, geo-location, [tree] checklist values, bird checklist values
 def download_csv(modeladmin, request, queryset):
         """
         Downloads model information into a csv file
