@@ -9,6 +9,7 @@ from django.conf import settings
 from app.forms import BootstrapAuthenticationForm
 from django.contrib import admin
 from django.contrib.auth import views
+from django.contrib.auth.decorators import login_required
 from app.views import *
 admin.autodiscover()
 
@@ -21,7 +22,7 @@ from django.conf.urls import include
 
 # Routers
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+# router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'questions', QuestionViewSet)
 router.register(r'dailyupdates', DailyUpdateViewSet)
@@ -69,6 +70,7 @@ urlpatterns = [
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
     url(r'^checkdb', CheckDBChangeView.as_view(), name='checkdb'),
+    url(r'^users_observation', login_required(UserMap.as_view()), name='usermap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

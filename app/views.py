@@ -6,6 +6,8 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required
+from django.views import generic
 from datetime import datetime
 from .models import Question, DailyUpdate, Tree, BirdObservation, Bird, TreeSpecies
 from .models import get_db_last_change_time
@@ -308,3 +310,14 @@ def get_or_create_guest_user():
         guest.set_password('guest_password')
         guest.save()
     return guest
+
+
+class UserMap(generic.ListView):
+    """ Display dailyupdates of that user"""
+    template_name = 'app/user.html'
+    model = DailyUpdate
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            return DailyUpdate.objects.filter(changed_by=self.request.user)
+        return None
