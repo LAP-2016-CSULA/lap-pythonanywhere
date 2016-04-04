@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from datetime import datetime
-from .models import Question, DailyUpdate, Tree, BirdObservation, Bird, TreeSpecies
+from .models import Question, DailyUpdate, Tree, Bird, TreeSpecies
 from .models import get_db_last_change_time
 from .serializers import *
 
@@ -89,15 +89,6 @@ class BirdViewSet(viewsets.ModelViewSet):
         else:
             return BirdSerializer
 
-class TreeSpeciesFilter(django_filters.FilterSet):
-    """A filter for the tree species view"""
-    #type_id = django_filters.NumberFilter(name='type__id')
-    #type_name = django_filters.CharFilter(name='type__name', lookup_type='iexact')
-    #changed_by = django_filters.CharFilter(name='changed_by__username', lookup_type='iexact')
-    #time = django_filters.DateTimeFilter(name='date_modified', lookup_type='gt')
-
-    class Meta:
-        model = TreeSpecies
 
 class TreeSpeciesViewSet(viewsets.ModelViewSet):
     """The viewset for the tree species"""
@@ -105,7 +96,6 @@ class TreeSpeciesViewSet(viewsets.ModelViewSet):
     #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     queryset = TreeSpecies.objects.all()
     serializer_class = TreeSpeciesSerializer
-    filter_class = TreeSpeciesFilter
 
     def get_serializer_class(self):
         action_list = ['create', 'update']
@@ -113,6 +103,7 @@ class TreeSpeciesViewSet(viewsets.ModelViewSet):
             return TreeSpeciesSetterSerializer   
         else:
             return TreeSpeciesSerializer
+
 
 # function based view
 @api_view(['GET', 'POST'])
@@ -129,6 +120,7 @@ def userinfo(request):
 
 
 class RegistrationView(APIView):
+    """ Registration view """
     permission_classes = []
     required_scopes = []
 
@@ -145,24 +137,23 @@ class RegistrationView(APIView):
 
 
 class CheckDBChangeView(APIView):
+    """ Checking what were changed in the DB """
     permission_classes = []
     required_scopes = []
 
     def get(self, request):
-        #serializer = CheckDBChangeSerializer()
+        """ Get the list of latest change timestamps of all models """
         queryset = models.DBLastChangeTime.objects.all()
         if queryset:
             serializer = CheckDBChangeSerializer(queryset, many=True)
-        #if last_change_time_object:
-        #    serializer = CheckDBChangeSerializer(last_change_time_object)
             return Response(serializer.data)
         else:
             return Response({})
 
     def post(self, request):
+        """ Get the list of latest change models after a specified timestamps """
         serializer = CheckDBChangeSetterSerializer(data=request.data)
         if serializer.is_valid():
-            # tmp = models.DBLastChangeTime(**serializer.validated_data)
             time = serializer.validated_data.get('time', None)
             if not time:
                 return Response({})
@@ -174,12 +165,14 @@ class CheckDBChangeView(APIView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """ Gonna be removed later??? """
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
+    """ ??? """
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     required_scopes = ['groups']
     queryset = Group.objects.all()
@@ -187,6 +180,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
+    """ Question Viewset. Returns json """
     #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     permission_classes = []
     queryset = Question.objects.all()
@@ -203,6 +197,7 @@ class DailyUpdateFilter(django_filters.FilterSet):
 
 
 class DailyUpdateViewSet(viewsets.ModelViewSet):
+    """ DailyUpdate viewset. Returns json """
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     permission_classes = []
     queryset = DailyUpdate.objects.all()
@@ -215,35 +210,6 @@ class DailyUpdateViewSet(viewsets.ModelViewSet):
             return DailyUpdateSetterSerializer
         else:
             return DailyUpdateSerializer
-
-    def perform_create(self, serializer):
-        auto_user(self, serializer)
-
-    def perform_update(self, serializer):
-        auto_user(self, serializer)
-
-
-class BirdObservationFilter(django_filters.FilterSet):
-    """ A filter for the birdobservation viewset. """
-    changed_by = django_filters.CharFilter(name='changed_by__username', lookup_type='iexact')
-    time = django_filters.DateTimeFilter(name='date_of_observation', lookup_type='gt')
-
-    class Meta:
-        model = BirdObservation
-
-
-class BirdObservationViewSet(viewsets.ModelViewSet):
-    permission_classes = []
-    queryset = BirdObservation.objects.all()
-    serializer_class = BirdObservationSerializer
-    filter_class = BirdObservationFilter
-
-    def get_serializer_class(self):
-        action_list = ['create', 'update']
-        if self.action in action_list:
-            return BirdObservationSetterSerializer
-        else:
-            return BirdObservationSerializer
 
     def perform_create(self, serializer):
         auto_user(self, serializer)

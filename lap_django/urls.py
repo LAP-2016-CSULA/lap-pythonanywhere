@@ -26,10 +26,8 @@ router.register(r'groups', GroupViewSet)
 router.register(r'questions', QuestionViewSet)
 router.register(r'dailyupdates', DailyUpdateViewSet)
 router.register(r'trees', TreeViewSet)
-router.register(r'birdobservation', BirdObservationViewSet)
-router.register(r'bird', BirdViewSet)
+router.register(r'birds', BirdViewSet)
 router.register(r'treespecies', TreeSpeciesViewSet)
-# router.register(r'userinfo', userinfo)
 
 
 urlpatterns = [
