@@ -51,39 +51,18 @@ class TreeSetterSerializer(serializers.ModelSerializer):
         exclude = ('image', 'changed_by',)
 
 class ChoiceSerializer(serializers.ModelSerializer):
-    """ Serializer of choice. """
+    """ Get Serializer of choice. """
     question = serializers.StringRelatedField()
     class Meta:
         model = models.Choice
 
 
 class ChoiceSetterSerializer(serializers.ModelSerializer):
+    """ Question choice update serializer """
     class Meta:
         model = models.Choice
 
-class TreeChoiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.TreeChoice
 
-class BirdChoiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.BirdChoice
-
-class BirdObservationSerializer(serializers.ModelSerializer):
-    """Serializer of Bird Observation """
-    bird = BirdSerializer(read_only=True)
-    tree = TreeSerializer(read_only=True)
-    choice = BirdChoiceSerializer(read_only=True)
-    changed_by = serializers.StringRelatedField()
-
-    class Meta:
-        model = models.BirdObservation
-
-class BirdObservationSetterSerializer(serializers.ModelSerializer):
-    """Serializer used in POST"""
-    class Meta:
-        model = models.BirdObservation
-        exclude = ('date_of_observation', 'changed_by',)
 
 # django-oauth-toolkkit tutorial
 class UserSerializer(serializers.ModelSerializer):
@@ -94,6 +73,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    """ ??? """
     class Meta:
         model = Group
 
@@ -104,10 +84,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'password', 'email')
 
+
 # http://stackoverflow.com/questions/14978464/django-rest-nested-object-add-on-create-post-not-just-update-put
 class DailyUpdateSerializer(serializers.ModelSerializer):
     """ Serializer of Daily Update. """
-    choices = TreeChoiceSerializer(many=True)
+    choices = ChoiceSerializer(many=True)
+    birds = BirdSerializer(many=True)
     changed_by = serializers.StringRelatedField()
 
     class Meta:

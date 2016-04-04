@@ -142,51 +142,15 @@ class Choice(models.Model):
         """ display choice text. """
         return str(self.question) + '|' + str(self.value)
 
-class BirdChoice(models.Model):
-    choice = models.ForeignKey(Choice)
-
-    def __str__(self):
-        """ display choice text. """
-        return str(self.choice)
-
-class TreeChoice(models.Model):
-    choice = models.ForeignKey(Choice)
-
-    def __str__(self):
-        return str(self.choice)
-
-class BirdObservation(models.Model):
-    """
-
-    """
-    bird = models.ForeignKey(Bird)
-    changed_by = models.ForeignKey('auth.User')
-    tree_observed_on = models.ForeignKey(Tree, blank=False)
-    choices = models.ManyToManyField(BirdChoice)
-    date_of_observation = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        """
-
-        """
-        return "Observation " + str(self.id) + " of " + str(self.bird) + " on " + str(self.tree_observed_on)
-
-    @property
-    def _history_user(self):
-        return self.changed_by
-
-    @_history_user.setter
-    def _history_user(self,value):
-        self.changed_by = value
 
 class DailyUpdate(models.Model):
     """ a tree daily update. each instance is bound to a specified tree. """
     tree = models.ForeignKey(Tree)
     changed_by = models.ForeignKey('auth.User')
-    choices = models.ManyToManyField(TreeChoice)
+    choices = models.ManyToManyField(Choice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     date_of_observation = models.DateTimeField(auto_now=True)    
+    birds = models.ManyToManyField(Bird)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -218,7 +182,5 @@ models.signals.post_save.connect(set_db_last_change_time, sender=Tree, dispatch_
 models.signals.post_save.connect(set_db_last_change_time, sender=Question, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=Bird, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=DailyUpdate, dispatch_uid='set_db_last_change_time')
-#models.signals.post_save.connect(set_db_last_change_time, sender=Species, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=TreeSpecies, dispatch_uid='set_db_last_change_time')
-models.signals.post_save.connect(set_db_last_change_time, sender=BirdObservation, dispatch_uid='set_db_last_change_time')
 
