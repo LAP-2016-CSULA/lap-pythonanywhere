@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>User</title>
+</head>
+<body>
+    <!-- Create Map container -->
+    <div id="googleMap" style="width:500px;height:380px;"></div>
+    {% if object_list %}
+    <!-- Google Maps tutorial at http://www.w3schools.com/googleapi/google_maps_basic.asp -->
+    <!-- Load Google Maps API -->
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+
+    <!-- Initialize -->
+    <script>
+        var markers = {};
+        var map = {};
+        function initialize() {
+            var mapProp = {
+                center: new google.maps.LatLng({{ object_list.0.tree.lat }}, {{ object_list.0.tree.long }}),
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+        
+            map  = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            {% for item in object_list %}
+            if (!(String({{ item.tree.id }}) in markers)) {
+                var marker{{ item.tree.id }} = new google.maps.Marker({
+                    position: new google.maps.LatLng({{ item.tree.lat }}, {{ item.tree.long }}),
+                });
+                marker{{ item.tree.id }}.setMap(map);
+                markers[String({{ item.tree.id }})] = marker{{ item.tree.id }};
+            }
+            {% endfor %}
+
+        }
+        function on_marker_clicked(id) {
+            if (String(id) in markers) {
+                map.panTo(markers[String(id)].getPosition());
+            }
+        }
+        // Add an Event Listener to Load the Map
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+    <h2>Tree observations:</h2>
+    {% for item in object_list %}
+    <p id="item{{ item.tree.id }}" onclick="on_marker_clicked({{ item.tree.id }})">{{ forloop.counter }}. Tree ID: {{ item.id }}. Species {{ item.tree.species.name }}. Lat = {{ item.tree.lat }}. Long = {{ item.tree.long }}</p>
+    {% endfor %}
+    {% endif %}
+</body>
+</html>
