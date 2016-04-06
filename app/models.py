@@ -150,7 +150,7 @@ class DailyUpdate(models.Model):
     choices = models.ManyToManyField(Choice)
     image = models.ImageField(max_length=None, null=True, blank=True)
     date_of_observation = models.DateTimeField(auto_now=True)    
-    birds = models.ManyToManyField(Bird)
+    birds = models.ManyToManyField(Bird, blank=True)
     history = HistoricalRecords()
 
     def __str__(self):
