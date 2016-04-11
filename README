@@ -8,3 +8,5 @@ django 1.9
 djangorestframework 3.3.2
 django-oauth-toolkit 0.10.0
 django-simple-history
+django-import-export
+Pillow
