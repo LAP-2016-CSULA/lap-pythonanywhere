@@ -5,3 +5,5 @@ wheel==0.24.0
 django-oauth-toolkit
 markdown
 django-filter
+django-import-export
+Pillow

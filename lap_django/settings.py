@@ -162,6 +162,7 @@ INSTALLED_APPS = (
     'simple_history',
     'oauth2_provider',
     'rest_framework',
+    'import_export',
     'app',
     # Uncomment the next line to enable the admin:
     # Uncomment the next line to enable admin documentation:
