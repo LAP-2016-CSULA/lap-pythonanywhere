@@ -33,6 +33,13 @@ def set_db_last_change_time(instance, created, raw, **kwargs):
         t.type = instance.__class__.__name__
     t.save()
 
+def set_db_last_change_time_deletion(instance, **kwargs):
+    t = get_db_last_change_time(instance.__class__.__name__)
+    if not t:
+        t = DBLastChangeTime()
+        t.type = instance.__class__.__name__
+    t.save()
+
 
 class SpeciesType(models.Model):
     """ species type. """
@@ -183,4 +190,9 @@ models.signals.post_save.connect(set_db_last_change_time, sender=Question, dispa
 models.signals.post_save.connect(set_db_last_change_time, sender=Bird, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=DailyUpdate, dispatch_uid='set_db_last_change_time')
 models.signals.post_save.connect(set_db_last_change_time, sender=TreeSpecies, dispatch_uid='set_db_last_change_time')
+models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=Tree, dispatch_uid='set_db_last_change_time_deletion')
+models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=Question, dispatch_uid='set_db_last_change_time_deletion')
+models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=Bird, dispatch_uid='set_db_last_change_time_deletion')
+models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=DailyUpdate, dispatch_uid='set_db_last_change_time_deletion')
+models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=TreeSpecies, dispatch_uid='set_db_last_change_time_deletion')
 
