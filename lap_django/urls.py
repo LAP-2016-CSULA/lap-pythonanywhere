@@ -29,7 +29,6 @@ router.register(r'trees', TreeViewSet)
 router.register(r'birds', BirdViewSet)
 router.register(r'treespecies', TreeSpeciesViewSet)
 
-
 urlpatterns = [
     # Examples:
     url(r'^$', home, name='home'),
@@ -67,6 +66,7 @@ urlpatterns = [
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
     url(r'^checkdb', CheckDBChangeView.as_view(), name='checkdb'),
+    url(r'deletedtrees', DeletedTreeView.as_view(), name='deletedtrees'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

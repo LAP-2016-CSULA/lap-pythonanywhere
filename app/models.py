@@ -93,6 +93,14 @@ class TreeSpecies(models.Model):
     def _history_user(self,value):
         self.changed_by = value 
 
+
+class DeletedTree(models.Model):
+    """ Store the deleted trees' ids.
+    NOTE: Should use push notification if have more time """
+    tree_id = models.IntegerField()
+    time = models.DateTimeField(auto_now=True)
+
+
 class Tree(models.Model):
     """ a tree instance. it contains location (longitude and latitude). """
     species = models.ForeignKey(TreeSpecies)
@@ -114,6 +122,12 @@ class Tree(models.Model):
     @_history_user.setter
     def _history_user(self,value):
         self.changed_by = value
+
+
+def add_to_deleted_list(instance, **kwargs):
+    """ Add tree id to deleted_list after delete it from the database """
+    d = DeletedTree(tree_id=instance.id)
+    d.save()
 
 
 class Bird(models.Model):
@@ -195,4 +209,4 @@ models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=Ques
 models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=Bird, dispatch_uid='set_db_last_change_time_deletion')
 models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=DailyUpdate, dispatch_uid='set_db_last_change_time_deletion')
 models.signals.post_delete.connect(set_db_last_change_time_deletion, sender=TreeSpecies, dispatch_uid='set_db_last_change_time_deletion')
-
+models.signals.post_delete.connect(add_to_deleted_list, sender=Tree, dispatch_uid='add_to_deleted_list')

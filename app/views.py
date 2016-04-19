@@ -24,6 +24,7 @@ import os
 
 #filter
 import django_filters
+from django.utils.dateparse import parse_datetime
 
 
 def home(request):
@@ -274,3 +275,35 @@ def get_or_create_guest_user():
         guest.set_password('guest_password')
         guest.save()
     return guest
+
+
+class DeletedTreeFilter(django_filters.FilterSet):
+    """ Filter for deleted trees. mostly by time """
+    time = django_filters.DateTimeFilter(name='time', lookup_type='gt')
+
+    class Meta:
+        model = models.DeletedTree
+
+
+class DeletedTreeView(APIView):
+    """ Deleted trees viewset """
+    permission_classes = []
+    serializer_class = DeleteTreeSerializer
+    #queryset = models.DeletedTree.objects.all()
+    filter_class = DeletedTreeFilter
+    
+    def get(self, request):
+        """ Get the list of deleted trees """
+        time = self.request.query_params.get('time', None)
+        if time:
+            #time = parse_datetime(param)
+            queryset = models.DeletedTree.objects.filter(time__gt=time)
+        else:
+            queryset = models.DeletedTree.objects.all()
+        if queryset:
+            serializer = DeleteTreeSerializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({})
+
+

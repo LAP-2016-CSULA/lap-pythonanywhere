@@ -128,3 +128,10 @@ class CheckDBSerializer(serializers.Serializer):
 
 class DateTimeSerializer(serializers.Serializer):
     time = serializers.DateTimeField()
+
+
+class DeleteTreeSerializer(serializers.ModelSerializer):
+    """ Deleted Tree serializer """
+    class Meta:
+        model = models.DeletedTree
+        exclude = ('id',)
