@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>User Index</title>
+</head>
+<body>
+    {% if object_list %}
+    <p>there is something  in the group list</p>
+
+    {% for g in object_list %}
+    <h2>
+        {{ g.name }}
+    </h2>
+        {% for u in g.user_set.all %}
+        <p><a href="{% url 'web:detail' u.username %}">{{ u.username }}</a></p>
+        {% endfor %}
+    {% endfor %}
+
+    {% endif %}
+</body>
+</html>
