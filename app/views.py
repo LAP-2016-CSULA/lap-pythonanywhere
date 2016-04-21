@@ -25,6 +25,7 @@ import os
 #filter
 import django_filters
 from django.utils.dateparse import parse_datetime
+from django.views import generic
 
 
 def home(request):
@@ -306,4 +307,29 @@ class DeletedTreeView(APIView):
         else:
             return Response({})
 
+
+class UserIndexView(generic.ListView):
+    """ List of classes/groups """
+    template_name = 'app/user_index.html'
+    
+    def get_queryset(self):
+        return Group.objects.all()
+
+
+class UserDetailView(generic.ListView):
+    """ List of user's tree """
+    template_name = 'app/user_detail.html'
+
+    def get_queryset(self):
+        if 'username' in self.kwargs:
+            name = self.kwargs['username']
+            try:
+                u = User.objects.get_by_natural_key(username=name)
+                du_list = models.DailyUpdate.objects.filter(changed_by__username=self.request.user).prefetch_related('tree')
+                tree_set = {du.tree for du in du_list}
+                return tree_set
+            except ObjectDoesNotExist:
+                return None
+        else:
+            return None
 
