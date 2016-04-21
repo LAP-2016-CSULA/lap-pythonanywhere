@@ -19,6 +19,7 @@
     <p><div class="tree" id="{{ t.id }}" onclick="on_marker_clicked(this.id)">
         <div class="id">{{ t.id }}</div>
         <div class="species">{{ t.species }}</div>
+        <img class="image" src="{{ t.image.url }}" alt="img" />
         <!-- Remove 'hidden' to unhide the lat & long -->
         <div class="lat" hidden>{{ t.lat }}</div>
         <div class="long" hidden>{{ t.long }}</div>
