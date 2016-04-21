@@ -324,8 +324,8 @@ class UserDetailView(generic.ListView):
         if 'username' in self.kwargs:
             name = self.kwargs['username']
             try:
-                u = User.objects.get_by_natural_key(username=name)
-                du_list = models.DailyUpdate.objects.filter(changed_by__username=self.request.user).prefetch_related('tree')
+                u = User.objects.get(username=name)
+                du_list = models.DailyUpdate.objects.filter(changed_by=u).prefetch_related('tree')
                 tree_set = {du.tree for du in du_list}
                 return tree_set
             except ObjectDoesNotExist:

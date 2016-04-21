@@ -83,7 +83,7 @@ class TreeSpecies(models.Model):
 
     def __str__(self):
         """ display name. """
-        return "[" + str(self.id) + "] " + self.name
+        return "[" + str(self.id) + "]" + self.name
 
     @property
     def _history_user(self):
