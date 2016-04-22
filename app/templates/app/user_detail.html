@@ -37,6 +37,8 @@
     {% load staticfiles %}
     <script src="{% static 'app/scripts/user_map.js' %}"></script>
 
+    {% else %}
+    <p>There is no tree</p>
     {% endif %}
 </body>
 </html>

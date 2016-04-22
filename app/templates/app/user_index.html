@@ -6,9 +6,12 @@
     <title>User Index</title>
 </head>
 <body>
+    <div>{{ request.user.username }} <a href="{% url 'web:logout' %}">Logout</a></div>
     {% if object_list %}
     <p>there is something  in the group list</p>
 
+    <!-- Only shows other users in the group if current logged in user is admin -->
+    {% if request.user.is_staff %}
     {% for g in object_list %}
     <h2>
         {{ g.name }}
@@ -17,7 +20,12 @@
         <p><a href="{% url 'web:detail' u.username %}">{{ u.username }}</a></p>
         {% endfor %}
     {% endfor %}
+    {% else %}
+    <p><a href="{% url 'web:detail' request.user.username %}">{{ request.user.username }}</a></p>
+    {% endif %}
 
+    {% else %}
+    <p>There is no group</p>
     {% endif %}
 </body>
 </html>

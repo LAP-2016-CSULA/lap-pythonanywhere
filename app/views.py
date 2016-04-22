@@ -313,7 +313,10 @@ class UserIndexView(generic.ListView):
     template_name = 'app/user_index.html'
     
     def get_queryset(self):
-        return Group.objects.all()
+        if self.request.user.is_staff:
+            return Group.objects.all()
+        else:
+            return self.request.user.groups.all()
 
 
 class UserDetailView(generic.ListView):
