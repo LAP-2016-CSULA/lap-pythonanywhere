@@ -2,7 +2,7 @@
 Definition of views. 
 """
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
@@ -333,3 +333,13 @@ class UserDetailView(generic.ListView):
         else:
             return None
 
+
+def delete_tree_image(request, id):
+    """ Delete a tree's image"""
+    if request.user.is_staff:
+        t = get_object_or_404(Tree, pk=id)
+        if t.image and os.path.isfile(t.image.path):
+            os.remove(t.image.path)
+        t.image = None
+        t.save()
+    return redirect(request.META.get('HTTP_REFERER'))
