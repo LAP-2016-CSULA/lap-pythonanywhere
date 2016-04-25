@@ -58,6 +58,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="app\static\app\scripts\user_map.js" />
+    <Content Include="app\templates\app\tree_detail.html" />
     <Content Include="app\templates\app\user_detail.html" />
     <Content Include="app\templates\app\user_index.html" />
     <Content Include="requirements.txt" />

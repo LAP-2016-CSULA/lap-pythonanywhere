@@ -346,3 +346,10 @@ def delete_tree_image(request, id):
         t.image = None
         t.save()
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+def delete_tree(request, id):
+    """ Delete a tree from database """
+    if request.user.is_staff:
+        t = get_object_or_404(Tree, pk=id).delete()
+    return redirect(request.META.get('HTTP_REFERER'))
