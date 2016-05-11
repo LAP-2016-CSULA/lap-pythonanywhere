@@ -2,10 +2,11 @@
 Definition of views. 
 """
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
+from django.core.urlresolvers import reverse
 from datetime import datetime
 from .models import Question, DailyUpdate, Tree, Bird, TreeSpecies
 from .models import get_db_last_change_time
@@ -25,7 +26,8 @@ import os
 #filter
 import django_filters
 from django.utils.dateparse import parse_datetime
-
+from django.views import generic
+from django.http import HttpResponseRedirect
 
 def home(request):
     """Renders the home page."""
@@ -307,3 +309,50 @@ class DeletedTreeView(APIView):
             return Response({})
 
 
+class UserIndexView(generic.ListView):
+    """ List of classes/groups """
+    template_name = 'app/user_index.html'
+    
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Group.objects.all()
+        else:
+            return self.request.user.groups.all()
+
+
+class UserDetailView(generic.ListView):
+    """ List of user's tree """
+    template_name = 'app/user_detail.html'
+
+    def get_queryset(self):
+        if 'username' in self.kwargs:
+            if not self.request.user.is_staff:
+                return HttpResponseRedirect(reverse('web:detail') + '/' + self.request.user.username)
+            name = self.kwargs['username']
+            try:
+                u = User.objects.get(username=name)
+                du_list = models.DailyUpdate.objects.filter(changed_by=u).prefetch_related('tree')
+                tree_set = {du.tree for du in du_list}
+                return tree_set
+            except ObjectDoesNotExist:
+                return None
+        else:
+            return None
+
+
+def delete_tree_image(request, id):
+    """ Delete a tree's image"""
+    if request.user.is_staff:
+        t = get_object_or_404(Tree, pk=id)
+        if t.image and os.path.isfile(t.image.path):
+            os.remove(t.image.path)
+        t.image = None
+        t.save()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+def delete_tree(request, id):
+    """ Delete a tree from database """
+    if request.user.is_staff:
+        t = get_object_or_404(Tree, pk=id).delete()
+    return redirect(request.META.get('HTTP_REFERER'))

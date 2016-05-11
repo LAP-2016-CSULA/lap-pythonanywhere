@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^register', RegistrationView.as_view(), name='register'),
     url(r'^checkdb', CheckDBChangeView.as_view(), name='checkdb'),
     url(r'deletedtrees', DeletedTreeView.as_view(), name='deletedtrees'),
+    url(r'web/', include('app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

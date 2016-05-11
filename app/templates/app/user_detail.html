@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>User Detail</title>
+</head>
+<body>
+    <!-- Only show the map if there is something in the list -->
+    {% if object_list %}
+    
+    <!-- Create Map container -->
+    <div id="googleMap" style="width:500px;height:380px;"></div>
+    <p>there is something  in the tree list</p>
+
+    <!-- Loop through the list to output the trees' info
+        the divs must contain specific classes for the js (user_map.js) to work -->
+    {% for t in object_list %}
+    <p><div class="tree" id="{{ t.id }}" onclick="on_marker_clicked(this.id)">
+        <div class="id">{{ t.id }}</div>
+        <div class="species">{{ t.species }}</div>
+        {% if t.image %}
+        <img class="image" src="{{ t.image.url }}" alt="img" />
+        <a href="{% url 'web:delete_img' t.id %}">Delete Image</a>
+        {% endif %}
+        {% if request.user.is_staff %}
+        <a href="{% url 'web:delete_tree' t.id %}">Delete Tree</a>
+        {% endif %}
+        <!-- Remove 'hidden' to unhide the lat & long -->
+        <div class="lat" hidden>{{ t.lat }}</div>
+        <div class="long" hidden>{{ t.long }}</div>
+    </div></p>
+    {% endfor %}
+    
+    <!-- Google Maps tutorial at http://www.w3schools.com/googleapi/google_maps_basic.asp -->
+    <!-- Load Google Maps API -->
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+
+    <!-- Load custom js for the map -->
+    {% load staticfiles %}
+    <script src="{% static 'app/scripts/user_map.js' %}"></script>
+
+    {% else %}
+    <p>There is no tree</p>
+    {% endif %}
+</body>
+</html>

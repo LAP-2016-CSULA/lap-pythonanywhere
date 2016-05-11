@@ -30,7 +30,7 @@ DATABASES = {
     }
 }
 
-LOGIN_URL = '/login'
+LOGIN_URL = '/login/'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -123,6 +123,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
             ],
         },
     },
