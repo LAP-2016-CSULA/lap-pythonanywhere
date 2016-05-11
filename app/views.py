@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpRequest
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
+from django.core.urlresolvers import reverse
 from datetime import datetime
 from .models import Question, DailyUpdate, Tree, Bird, TreeSpecies
 from .models import get_db_last_change_time
@@ -26,7 +27,7 @@ import os
 import django_filters
 from django.utils.dateparse import parse_datetime
 from django.views import generic
-
+from django.http import HttpResponseRedirect
 
 def home(request):
     """Renders the home page."""
@@ -325,6 +326,8 @@ class UserDetailView(generic.ListView):
 
     def get_queryset(self):
         if 'username' in self.kwargs:
+            if not self.request.user.is_staff:
+                return HttpResponseRedirect(reverse('web:detail') + '/' + self.request.user.username)
             name = self.kwargs['username']
             try:
                 u = User.objects.get(username=name)
