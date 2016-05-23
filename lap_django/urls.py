@@ -1,5 +1,5 @@
 """
-Definition of urls for lap_django. 
+Definition of urls for lap_django.
 """
 
 from datetime import datetime
@@ -14,10 +14,7 @@ admin.autodiscover()
 
 from rest_framework import permissions, routers, serializers, viewsets
 
-# Uncomment the next lines to enable the admin:
 from django.conf.urls import include
-# from django.contrib import admin
-# admin.autodiscover()
 
 # Routers
 router = routers.DefaultRouter()
@@ -64,8 +61,13 @@ urlpatterns = [
 
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     # custom API
+    url(r'^api/userinfo', userinfo, name='userinfo'),
+    url(r'^api/register', RegistrationView.as_view(), name='register'),
+    url(r'^api/checkdb', CheckDBChangeView.as_view(), name='checkdb'),
+    url(r'^api/deletedtrees', DeletedTreeView.as_view(), name='deletedtrees'),
+    url(r'^web/', include('app.urls')),
     url(r'^userinfo', userinfo, name='userinfo'),
     url(r'^register', RegistrationView.as_view(), name='register'),
     url(r'^checkdb', CheckDBChangeView.as_view(), name='checkdb'),
