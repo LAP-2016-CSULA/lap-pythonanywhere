@@ -56,15 +56,26 @@ urlpatterns = [
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    #Site urls
+    url(r'^trees', include('app.urls')),
+
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api/', include(router.urls)),
     # custom API
+<<<<<<< HEAD
     url(r'^api/userinfo', userinfo, name='userinfo'),
     url(r'^api/register', RegistrationView.as_view(), name='register'),
     url(r'^api/checkdb', CheckDBChangeView.as_view(), name='checkdb'),
     url(r'^api/deletedtrees', DeletedTreeView.as_view(), name='deletedtrees'),
     url(r'^web/', include('app.urls')),
+=======
+    url(r'^userinfo', userinfo, name='userinfo'),
+    url(r'^register', RegistrationView.as_view(), name='register'),
+    url(r'^checkdb', CheckDBChangeView.as_view(), name='checkdb'),
+    url(r'deletedtrees', DeletedTreeView.as_view(), name='deletedtrees'),
+    url(r'/', include('app.urls')),
+>>>>>>> a47289a6b97ab4ae81c29870817026e63d464427
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -8,7 +8,7 @@ from rest_framework import permissions, routers, serializers, viewsets
 
 # This file contains the urls for website
 # namespace for app
-app_name = 'web'
+app_name = 'app'
 
 urlpatterns = [
     url(r'^user/$', login_required(views.UserIndexView.as_view()), name='index'),
