@@ -37,7 +37,7 @@ article, aside, details, figcaption, figure, header, hgroup, menu, nav, section 
 }
 body {
 	line-height: 1;
-	background-image: url("C:/xampp/htdocs/LAP/images/yosemite_editted.jpg");
+	background-image: url("yosemite_editted.jpg");
 	font-size: 13px;
 	font-family: Arial, Helvetica, sans-serif;
 }

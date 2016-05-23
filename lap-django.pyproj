@@ -50,6 +50,8 @@
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
     <Folder Include="app\static\app\fonts\" />
+    <Folder Include="app\static\app\css\" />
+    <Folder Include="app\static\app\images\" />
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
@@ -57,7 +59,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="app\static\app\css\admin.css" />
+    <Content Include="app\static\app\css\index.css" />
+    <Content Include="app\static\app\css\map.css" />
+    <Content Include="app\static\app\css\reset.css" />
+    <Content Include="app\static\app\css\tree.css" />
+    <Content Include="app\static\app\css\yosemite_editted.jpg" />
+    <Content Include="app\static\app\images\biology_dept_logo.png" />
+    <Content Include="app\static\app\images\csula.gif" />
+    <Content Include="app\static\app\images\csula.jpg" />
+    <Content Include="app\static\app\images\csula_logo.png" />
+    <Content Include="app\static\app\images\eol.png" />
+    <Content Include="app\static\app\images\LAP_logo.png" />
+    <Content Include="app\static\app\images\phenology_project_ca.png" />
+    <Content Include="app\static\app\images\sycamore.jpg" />
+    <Content Include="app\static\app\images\yosemite.jpg" />
+    <Content Include="app\static\app\images\yosemite_editted.jpg" />
     <Content Include="app\static\app\scripts\user_map.js" />
+    <Content Include="app\templates\app\admin.html" />
+    <Content Include="app\templates\app\map.html" />
+    <Content Include="app\templates\app\tree.html" />
     <Content Include="app\templates\app\tree_detail.html" />
     <Content Include="app\templates\app\user_detail.html" />
     <Content Include="app\templates\app\user_index.html" />

@@ -28,7 +28,7 @@ router.register(r'treespecies', TreeSpeciesViewSet)
 
 urlpatterns = [
     # Examples:
-    url(r'^$', home, name='home'),
+    url(r'^$', index, name='index'),
     url(r'^contact$', contact, name='contact'),
     url(r'^about', about, name='about'),
     url(r'^login/$',
@@ -49,6 +49,8 @@ urlpatterns = [
             'next_page': '/',
         },
         name='logout'),
+
+    url(r'^map', treemap, name="map"),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

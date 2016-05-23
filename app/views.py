@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
 from datetime import datetime
-from .models import Question, DailyUpdate, Tree, Bird, TreeSpecies
+from .models import Question, DailyUpdate, Tree, Bird, TreeSpecies, SpeciesType
 from .models import get_db_last_change_time
 from .serializers import *
 
@@ -29,18 +29,15 @@ from django.utils.dateparse import parse_datetime
 from django.views import generic
 from django.http import HttpResponseRedirect
 
-def home(request):
+def index(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/index.html',
-        context_instance = RequestContext(request,
-        {
-            'title':'Home Page',
-            'year':datetime.now().year,
-        })
-    )
+    return render(request,'app/index.html')
+
+def treemap(request):
+    "Render the page with a google map"
+    tree = TreeSpecies.objects.order_by('name')
+    return render(request, 'app/map.html',{"tree":tree})
 
 def contact(request):
     """Renders the contact page."""
