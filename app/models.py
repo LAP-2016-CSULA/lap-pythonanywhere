@@ -5,6 +5,7 @@ Each models should have a history field of type HistoricalRecords to store the h
 """
 
 from django.db import models
+from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 from PIL import Image, ImageFile
 import io
@@ -40,6 +41,49 @@ def set_db_last_change_time_deletion(instance, **kwargs):
         t.type = instance.__class__.__name__
     t.save()
 
+class Season(models.Model):
+    """Seasons for available semesters"""
+    name = models.CharField(max_length=50)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """ display the category name of the semester e.g. Fall """
+        return self.name
+
+#Gives choices in the format of year - year e.g 2015 - 2016
+#Found here: https://groups.google.com/forum/#!msg/django-users/al95x1TXFV4/7mCCWQE3jtAJ
+YEAR_CHOICES = []
+for year in range(2015, (datetime.datetime.now().year + 1)):
+    YEAR_CHOICES.append((year, year))
+
+class Semester(models.Model):
+    """School semester information"""
+    season = models.ForeignKey(Season)
+    year = models.IntegerField(('year'), max_length=4, choices=YEAR_CHOICES, default=datetime.datetime.now().year)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        """ display the category name of the semester e.g. Fall """
+        return str(season) + " " + str(year)
+
+class SemesterClass(models.Model):
+    """Information for a specific semester"""
+    category_id = models.IntegerField(help_text="Enter the id of this class from the school catelog");
+    name = models.CharField(max_length=255)
+    semester = models.ForeignKey(Semester);
+
+    def __str__(self):
+        """ display the category name of the class e.g. Biology 101 - Fall 2015, 2016"""
+        return self.name + " - " + str(self.semester)
+
+class UserProfile(models.Model):
+    """Profile for the user. Contains class information"""
+    user = models.ForeignKey(User)
+    current_class = models.ForeignKey(SemesterClass)
+
+    def __str__(self):
+        """ display info of the User"""
+        return str(self.user.username) + " in " + str(self.current_class)
 
 class SpeciesType(models.Model):
     """ species type. """

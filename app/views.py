@@ -36,8 +36,9 @@ def index(request):
 
 def treemap(request):
     "Render the page with a google map"
-    tree = TreeSpecies.objects.order_by('name')
-    return render(request, 'app/map.html',{"tree":tree})
+    #tree = TreeSpecies.objects.order_by('name')
+    assert isinstance(request, HttpRequest)
+    return render(request, 'app/map.html')
 
 def contact(request):
     """Renders the contact page."""

@@ -1,34 +1,40 @@
 {% load staticfiles %}
-<!DOCTYPE html>
 <html>
 	<head>
 		<title>LAP - Map</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<link rel="stylesheet" href="{% static 'app/css/reset.css' %}" />
 		<link rel="stylesheet" href="{% static 'app/css/map.css' %}" />
-        <script src="{% static 'app/scripts/user_map.js' %}"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+        
 	</head>
 	<body>
 		<!-- Begin Wrapper -->
 		<div id="wrapper">
 		  <!-- Begin Header -->
 		  <div id="header">
+
 			<!-- Begin Tree Map -->
-			<div id="googleMap" style="width:500px;height:380px">
-				
-			</div>
-		<script src="C:/Users/Kiara/Desktop/LAP/website/js/user_map.js"></script>
+			<div id="googleMap"></div>   
+              <script src="http://maps.googleapis.com/maps/api/js?callback=initialize"></script>          
+              <script>
+                  function initialize() {
+                    csula = new google.maps.LatLng(34.0651, 118.1701);
+                    var mapProperties = {
+                        center: csula,
+                        zoom: 5,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = google.maps.Map(document.getElementById("googleMap"), mapProperties);
+                }
+                google.maps.event.addDomListener(window, 'load', initialize);
+             </script>
 			<!-- End Tree Map -->
 		  </div>
 		  <!-- End Header -->
 		  
 		  <!-- Begin Tree List -->
 		  <div id="treeList">
-			<!-- Django Girl tutortial part -->
-                {% for tree in tree %}
-                    {{tree.name}} <br/>
-                {% endfor %}
+			
 		  </div>
 		  <!-- End Tree List -->
 		  

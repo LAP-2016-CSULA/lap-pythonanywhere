@@ -16,6 +16,10 @@ body {
  height: 250px;
  margin: 10px 0px 0px 0px;
 }
+#googleMap {
+    width:500px;
+    height:380px;
+}
 #treeList{
 	height: 355px;
 	width: 920px;
