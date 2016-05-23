@@ -7,7 +7,7 @@ from datetime import datetime
 
 # This file contains the urls for website
 # namespace for app
-app_name = 'web'
+app_name = 'app'
 
 urlpatterns = [
     url(r'^$', login_required(views.UserIndexView.as_view()), name='index'),
