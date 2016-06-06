@@ -3,7 +3,7 @@ Definition of urls for lap_django.
 """
 
 from datetime import datetime
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.conf import settings
 from app.forms import BootstrapAuthenticationForm
@@ -57,6 +57,10 @@ urlpatterns = [
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+
+    #Mobile app download urls
+    url(r'^distribute/', include('django_mobile_app_distribution.urls')),
+    url(r'^accounts/', include('django_mobile_app_distribution.auth_urls')),
 
     #Site urls
     url(r'^trees', include('app.urls')),

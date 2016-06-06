@@ -59,7 +59,7 @@ for year in range(2015, (datetime.datetime.now().year + 1)):
 class Semester(models.Model):
     """School semester information"""
     season = models.ForeignKey(Season)
-    year = models.IntegerField(('year'), max_length=4, choices=YEAR_CHOICES, default=datetime.datetime.now().year)
+    year = models.IntegerField(('year'), choices=YEAR_CHOICES, default=datetime.datetime.now().year)
     history = HistoricalRecords()
 
     def __str__(self):

@@ -166,6 +166,7 @@ INSTALLED_APPS = (
     'oauth2_provider',
     'rest_framework',
     'import_export',
+    'django_mobile_app_distribution',
     'app',
     # Uncomment the next line to enable the admin:
     # Uncomment the next line to enable admin documentation:
@@ -203,6 +204,11 @@ LOGGING = {
 
 # Specify the default test runner.
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+#Allow downloading mobile apps
+BASE_DIR = path.dirname(__file__)
+
+LOGIN_REDIRECT_URL = "/distribute/"
 
 # Tell djangorestframework to use the new authentication backend
 OAUTH2_PROVIDER = {
