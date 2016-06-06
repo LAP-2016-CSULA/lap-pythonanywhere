@@ -64,7 +64,7 @@ class Semester(models.Model):
 
     def __str__(self):
         """ display the category name of the semester e.g. Fall """
-        return str(season) + " " + str(year)
+        return str(self.season) + " " + str(self.year)
 
 class SemesterClass(models.Model):
     """Information for a specific semester"""
@@ -80,6 +80,7 @@ class UserProfile(models.Model):
     """Profile for the user. Contains class information"""
     user = models.ForeignKey(User)
     current_class = models.ForeignKey(SemesterClass)
+    is_teacher = models.BooleanField(default=False)
 
     def __str__(self):
         """ display info of the User"""

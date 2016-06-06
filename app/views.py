@@ -3,7 +3,7 @@ Definition of views.
 """
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
@@ -21,7 +21,12 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from oauth2_provider.oauth2_backends import get_oauthlib_core
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
-import os
+from django.core.servers import basehttp
+from wsgiref.util import FileWrapper
+from django.conf import settings
+import mimetypes
+
+import os, tempfile, zipfile
 
 #filter
 import django_filters
@@ -39,6 +44,17 @@ def treemap(request):
     #tree = TreeSpecies.objects.order_by('name')
     assert isinstance(request, HttpRequest)
     return render(request, 'app/map.html')
+
+def send_android(request):
+    """Send Android apk"""
+    filename = "C:/Users/Kiara/Desktop/LAP/Server/lap-pythonanywhere/lap_django/android/android_apps/lap-app.apk"
+    download_name = "LAPAndroid.apk"
+    wrapper = FileWrapper(open(filename, encoding="utf-8"))
+    content_type = "application/force-download"
+    response = HttpResponse(wrapper, content_type=content_type)
+    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Disposition'] = "attachment; filename=%s"%download_name
+    return response
 
 def contact(request):
     """Renders the contact page."""

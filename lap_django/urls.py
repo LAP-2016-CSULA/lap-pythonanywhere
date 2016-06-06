@@ -52,6 +52,8 @@ urlpatterns = [
 
     url(r'^map', treemap, name="map"),
 
+    url(r'^lap-app.apk', send_android),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

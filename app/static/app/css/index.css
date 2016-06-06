@@ -13,6 +13,11 @@ body {
  width: 922px;
  padding: 0 0 0 0;
 }
+h2{
+    padding: 10px 10px 10px 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
 
 #copyright{
 	text-align: center;
@@ -53,10 +58,17 @@ body {
 	display: block;
 	text-decoration: none;
 	padding-bottom: 10px;
+    margin-bottom: 30px;
+    margin-left: 50px;
 }
 
-#phenology img {
-	display:block;
+#phenologyImage {
+	float:left;
+    padding-bottom: 10px;
+}
+
+#phenologyImage img{
+    display: block;
 }
 #leftcolumn { 
  color: #333;
@@ -64,8 +76,18 @@ body {
  background:#D9ED8A;
  margin: 0px 5px 5px 0px;
  padding: 10px;
- height: 350px;
+ height: 200px;
  width: 195px;
+ float: left;
+}
+#appcolumn { 
+ color: #333;
+ border: 1px solid #ccc;
+ background:#D9ED8A;
+ margin: 0px 5px 5px 0px;
+ padding: 10px;
+ width: 195px;
+ height: 200px;
  float: left;
 }
 #rightcolumn { 
@@ -75,7 +97,7 @@ body {
  background:#D9ED8A;
  margin: 0px 0px 5px 0px;
  padding: 10px;
- height: 350px;
+ height: 427px;
  width: 678px;
  display: inline;
  overflow-y: scroll;

@@ -1,0 +1,11 @@
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\bin\Microsoft.PythonTools.WebRole.dll
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\obj\Debug\attach_server.py
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\obj\Debug\visualstudio_py_debugger.py
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\obj\Debug\visualstudio_py_repl.py
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\obj\Debug\visualstudio_py_util.py
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\obj\Debug\__init__.py
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\obj\Debug\__main__.py
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\bin\AzureSetup.cfg
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\bin\Microsoft.PythonTools.AzureSetup.exe
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\bin\Microsoft.PythonTools.AzureSetup.exe.config
+C:\Users\Kiara\Desktop\LAP\Server\lap-pythonanywhere\bin\wfastcgi.py

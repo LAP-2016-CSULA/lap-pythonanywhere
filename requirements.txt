@@ -6,4 +6,5 @@ django-oauth-toolkit
 markdown
 django-filter
 django-import-export
+django_mobile_app_distribution
 Pillow
