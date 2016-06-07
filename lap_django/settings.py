@@ -166,6 +166,7 @@ INSTALLED_APPS = (
     'oauth2_provider',
     'rest_framework',
     'import_export',
+    #Used to store the apk for the phone apps
     'django_mobile_app_distribution',
     'app',
     # Uncomment the next line to enable the admin:
